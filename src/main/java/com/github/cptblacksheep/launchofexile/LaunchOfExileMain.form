@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.cptblacksheep.launchofexile.LaunchOfExileMain">
+  <grid id="27dc6" binding="panelMain" layout-manager="GridLayoutManager" row-count="12" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="5" bottom="5" right="5"/>
+    <constraints>
+      <xy x="20" y="20" width="714" height="466"/>
+    </constraints>
+    <properties>
+      <focusable value="false"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <scrollpane id="c51e1" binding="scrollPaneTools">
+        <constraints>
+          <grid row="2" column="0" row-span="2" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <focusable value="false"/>
+          <verticalScrollBarPolicy value="20"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="37d00" class="javax.swing.JList" binding="listTools">
+            <constraints/>
+            <properties>
+              <autoscrolls value="true"/>
+              <focusable value="true"/>
+              <model/>
+              <selectionMode value="0"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+      <scrollpane id="1c343" binding="scrollPaneWebsites">
+        <constraints>
+          <grid row="5" column="0" row-span="2" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <focusable value="false"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="50863" class="javax.swing.JList" binding="listWebsites">
+            <constraints/>
+            <properties>
+              <selectionMode value="0"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+      <component id="bdd9e" class="javax.swing.JButton" binding="btnAddTool">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Add tool"/>
+        </properties>
+      </component>
+      <component id="2fe6c" class="javax.swing.JButton" binding="btnRemoveTool">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Remove selected tool"/>
+        </properties>
+      </component>
+      <component id="56c5d" class="javax.swing.JLabel" binding="lblTools">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <focusable value="true"/>
+          <text value="Tools:"/>
+        </properties>
+      </component>
+      <component id="d4158" class="javax.swing.JLabel" binding="lblWebsites">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <focusable value="false"/>
+          <requestFocusEnabled value="true"/>
+          <text value="Websites:"/>
+        </properties>
+      </component>
+      <component id="cf768" class="javax.swing.JButton" binding="btnAddWebsite">
+        <constraints>
+          <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Add website"/>
+        </properties>
+      </component>
+      <component id="cdaee" class="javax.swing.JButton" binding="btnLaunch">
+        <constraints>
+          <grid row="11" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="350" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <focusCycleRoot value="false"/>
+          <horizontalAlignment value="0"/>
+          <text value="Launch"/>
+        </properties>
+      </component>
+      <component id="83dc0" class="javax.swing.JButton" binding="btnRemoveWebsite" default-binding="true">
+        <constraints>
+          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Remove selected website"/>
+        </properties>
+      </component>
+      <component id="160d" class="javax.swing.JSeparator" binding="separatorLaunch">
+        <constraints>
+          <grid row="10" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="6" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <orientation value="0"/>
+        </properties>
+      </component>
+      <vspacer id="a7ef1">
+        <constraints>
+          <grid row="1" column="3" row-span="6" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="250"/>
+          </grid>
+        </constraints>
+      </vspacer>
+      <hspacer id="90a4f">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <minimum-size width="450" height="-1"/>
+          </grid>
+        </constraints>
+      </hspacer>
+      <grid id="d15f9" binding="panelVersion" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="8" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="64ef1" class="javax.swing.JLabel" binding="lblVersion">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="100" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <focusable value="false"/>
+              <text value="Poe version:"/>
+            </properties>
+          </component>
+          <component id="5aa76" class="javax.swing.JComboBox" binding="comboBoxVersion">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <model/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <component id="96db1" class="javax.swing.JButton" binding="btnLaunchPoeOnly">
+        <constraints>
+          <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="50"/>
+          </grid>
+        </constraints>
+        <properties>
+          <text value="Launch Poe only"/>
+        </properties>
+      </component>
+      <hspacer id="fdade">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+      </hspacer>
+      <vspacer id="72867">
+        <constraints>
+          <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="10"/>
+          </grid>
+        </constraints>
+      </vspacer>
+      <vspacer id="b6f67">
+        <constraints>
+          <grid row="10" column="3" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="10"/>
+          </grid>
+        </constraints>
+      </vspacer>
+      <vspacer id="d26c8">
+        <constraints>
+          <grid row="8" column="3" row-span="2" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="50"/>
+          </grid>
+        </constraints>
+      </vspacer>
+      <grid id="63eb0" binding="panelPoeExeLocation" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="9" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="7407f" class="javax.swing.JLabel" binding="lblPoeExeLocation">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="100" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <focusable value="false"/>
+              <text value="Location(Poe .exe):"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+          <component id="39090" class="javax.swing.JTextField" binding="tfPoeExeLocation">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <editable value="false"/>
+              <visible value="true"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <component id="3befe" class="javax.swing.JButton" binding="btnSetPoeExeLocation">
+        <constraints>
+          <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Set location"/>
+          <visible value="true"/>
+        </properties>
+      </component>
+      <vspacer id="47224">
+        <constraints>
+          <grid row="9" column="4" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="-1" height="25"/>
+          </grid>
+        </constraints>
+      </vspacer>
+    </children>
+  </grid>
+</form>
