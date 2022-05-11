@@ -36,6 +36,10 @@ public class LaunchOfExileMain {
     private JButton btnLaunchPoeOnly;
     private JPanel panelVersion;
     private JPanel panelPoeExeLocation;
+    private JButton btnEnableDisableTool;
+    private JButton btnEnableDisableWebsite;
+    private JButton btnRenameTool;
+    private JButton btnRenameWebsite;
 
     private LaunchOfExileMain() {
         modelTools = new DefaultListModel<>();
@@ -79,6 +83,19 @@ public class LaunchOfExileMain {
             }
         });
 
+        btnEnableDisableTool.addActionListener(e -> {
+
+        });
+
+        btnRenameTool.addActionListener(e -> {
+            UriWrapper tool = listTools.getSelectedValue();
+
+            if (tool == null)
+                return;
+
+            rename(tool);
+        });
+
         btnAddWebsite.addActionListener(e -> {
             String websiteUrl = JOptionPane.showInputDialog("Insert URL to add:");
 
@@ -98,6 +115,19 @@ public class LaunchOfExileMain {
                 websiteManager.removeWebsite(website);
                 jsonSerializer.saveData();
             }
+        });
+
+        btnEnableDisableWebsite.addActionListener(e -> {
+
+        });
+
+        btnRenameWebsite.addActionListener(e -> {
+            UriWrapper website = listWebsites.getSelectedValue();
+
+            if (website == null)
+                return;
+
+            rename(website);
         });
 
         btnSetPoeExeLocation.addActionListener(e -> {
@@ -134,6 +164,8 @@ public class LaunchOfExileMain {
             applicationManager.startPoe(applicationManager.getSelectedPoeVersion());
             System.exit(0);
         });
+
+
     }
 
     public static void initialize() {
@@ -175,6 +207,20 @@ public class LaunchOfExileMain {
             btnSetPoeExeLocation.setVisible(true);
             applicationManager.setSelectedPoeVersion(PoeVersion.STANDALONE);
         }
+    }
+
+    private void rename(UriWrapper uriWrapper) {
+        String newName = JOptionPane.showInputDialog("Enter new name:");
+
+        if (newName == null)
+            return;
+
+        if (!newName.isBlank()) {
+            uriWrapper.setName(newName);
+            jsonSerializer.saveData();
+        } else
+            JOptionPane.showMessageDialog(null, "Name can't be blank",
+                    "Launch of Exile - Warning", JOptionPane.WARNING_MESSAGE);
     }
 
     public static void main(String[] args) {
