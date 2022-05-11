@@ -1,4 +1,4 @@
-package com.github.cptblacksheep.launchofexile;
+package com.github.cptblacksheep.launchofexile.datamanagement;
 
 import java.util.Objects;
 
