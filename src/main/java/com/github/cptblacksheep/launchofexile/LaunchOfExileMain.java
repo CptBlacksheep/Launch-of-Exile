@@ -13,11 +13,11 @@ public class LaunchOfExileMain {
     private final ApplicationManager applicationManager;
     private final WebsiteManager websiteManager;
     private final JsonSerializer jsonSerializer;
+    private final DefaultListModel<UriWrapper> modelTools;
+    private final DefaultListModel<UriWrapper> modelWebsites;
     private JPanel panelMain;
     private JList<UriWrapper> listTools;
-    private final DefaultListModel<UriWrapper> modelTools;
     private JList<UriWrapper> listWebsites;
-    private final DefaultListModel<UriWrapper> modelWebsites;
     private JButton btnLaunch;
     private JButton btnAddTool;
     private JButton btnRemoveTool;
@@ -46,6 +46,8 @@ public class LaunchOfExileMain {
         modelWebsites = new DefaultListModel<>();
         listTools.setModel(modelTools);
         listWebsites.setModel(modelWebsites);
+        listTools.setCellRenderer(new UriWrapperListCellRenderer());
+        listWebsites.setCellRenderer(new UriWrapperListCellRenderer());
 
         applicationManager = new ApplicationManager();
         websiteManager = new WebsiteManager();
@@ -84,7 +86,13 @@ public class LaunchOfExileMain {
         });
 
         btnEnableDisableTool.addActionListener(e -> {
+            UriWrapper tool = listTools.getSelectedValue();
 
+            if (tool != null) {
+                tool.setEnabled(!tool.isEnabled());
+                listTools.repaint();
+                jsonSerializer.saveData();
+            }
         });
 
         btnRenameTool.addActionListener(e -> {
@@ -94,6 +102,7 @@ public class LaunchOfExileMain {
                 return;
 
             rename(tool);
+            listTools.repaint();
         });
 
         btnAddWebsite.addActionListener(e -> {
@@ -118,7 +127,13 @@ public class LaunchOfExileMain {
         });
 
         btnEnableDisableWebsite.addActionListener(e -> {
+            UriWrapper website = listWebsites.getSelectedValue();
 
+            if (website != null) {
+                website.setEnabled(!website.isEnabled());
+                listWebsites.repaint();
+                jsonSerializer.saveData();
+            }
         });
 
         btnRenameWebsite.addActionListener(e -> {
@@ -128,6 +143,7 @@ public class LaunchOfExileMain {
                 return;
 
             rename(website);
+            listWebsites.repaint();
         });
 
         btnSetPoeExeLocation.addActionListener(e -> {
@@ -154,8 +170,8 @@ public class LaunchOfExileMain {
         });
 
         btnLaunch.addActionListener(e -> {
-            websiteManager.openAllWebsites();
-            applicationManager.startAllApplications();
+            websiteManager.openAllEnabledWebsites();
+            applicationManager.startAllEnabledApplications();
             applicationManager.startPoe(applicationManager.getSelectedPoeVersion());
             System.exit(0);
         });

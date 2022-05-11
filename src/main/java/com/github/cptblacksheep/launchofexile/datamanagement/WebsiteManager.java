@@ -19,8 +19,8 @@ public class WebsiteManager {
         openWebsite(website.getUri());
     }
 
-    public void openAllWebsites() {
-        websites.forEach(website -> {
+    public void openAllEnabledWebsites() {
+        websites.stream().filter(UriWrapper::isEnabled).forEach(website -> {
             try {
                 openWebsite(website);
             } catch (URISyntaxException | IOException e) {

@@ -28,8 +28,8 @@ public class ApplicationManager {
         }
     }
 
-    public void startAllApplications() {
-        applications.forEach(application -> {
+    public void startAllEnabledApplications() {
+        applications.stream().filter(UriWrapper::isEnabled).forEach(application -> {
             try {
                 startApplication(application);
             } catch (IOException e) {

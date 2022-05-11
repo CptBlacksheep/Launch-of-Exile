@@ -5,24 +5,19 @@ import java.util.Objects;
 public class UriWrapper {
     private String uri;
     private String name;
-    private boolean enabled;
+    private boolean enabled = true;
 
-    public UriWrapper() {
-        this("", "", true);
+    UriWrapper() { //default constructor for jackson to work
+        this("", "");
     }
 
     public UriWrapper(String uri) {
-        this(uri, "", true);
+        this(uri, uri);
     }
 
     public UriWrapper(String uri, String name) {
-        this(uri, name, true);
-    }
-
-    public UriWrapper(String uri, String name, boolean enabled) {
         this.uri = Objects.requireNonNull(uri);
         this.name = Objects.requireNonNull(name);
-        this.enabled = enabled;
     }
 
     public String getUri() {
@@ -49,8 +44,4 @@ public class UriWrapper {
         this.enabled = enabled;
     }
 
-    @Override
-    public String toString() {
-        return uri;
-    }
 }
