@@ -6,12 +6,17 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class WebsiteManager {
-    private ArrayList<String> websites = new ArrayList<>();
+    private ArrayList<UriWrapper> websites = new ArrayList<>();
 
-    public static void openWebsite(String website) throws URISyntaxException, IOException {
-        Desktop.getDesktop().browse(new URI(website));
+    public static void openWebsite(String websiteUri) throws URISyntaxException, IOException {
+        Desktop.getDesktop().browse(new URI(websiteUri));
+    }
+
+    public static void openWebsite(UriWrapper website) throws URISyntaxException, IOException {
+        openWebsite(website.getUri());
     }
 
     public void openAllWebsites() {
@@ -26,19 +31,19 @@ public class WebsiteManager {
         });
     }
 
-    public ArrayList<String> getWebsites() {
+    public ArrayList<UriWrapper> getWebsites() {
         return websites;
     }
 
-    public void setWebsites(ArrayList<String> websites) {
-        this.websites = websites;
+    public void setWebsites(ArrayList<UriWrapper> websites) {
+        this.websites = Objects.requireNonNull(websites);
     }
 
-    public void addWebsite(String website) {
-        websites.add(website);
+    public void addWebsite(UriWrapper website) {
+        websites.add(Objects.requireNonNull(website));
     }
 
-    public void removeWebsite(String website) {
+    public void removeWebsite(UriWrapper website) {
         websites.remove(website);
     }
 }

@@ -13,10 +13,10 @@ public class LaunchOfExileMain {
     private final WebsiteManager websiteManager;
     private final JsonSerializer jsonSerializer;
     private JPanel panelMain;
-    private JList<String> listTools;
-    private final DefaultListModel<String> modelTools;
-    private JList<String> listWebsites;
-    private final DefaultListModel<String> modelWebsites;
+    private JList<UriWrapper> listTools;
+    private final DefaultListModel<UriWrapper> modelTools;
+    private JList<UriWrapper> listWebsites;
+    private final DefaultListModel<UriWrapper> modelWebsites;
     private JButton btnLaunch;
     private JButton btnAddTool;
     private JButton btnRemoveTool;
@@ -60,7 +60,8 @@ public class LaunchOfExileMain {
             int returnValue = fc.showDialog(null, "Add to tools");
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
-                String tool = fc.getSelectedFile().getAbsolutePath();
+                String toolPath = fc.getSelectedFile().getAbsolutePath();
+                UriWrapper tool = new UriWrapper(toolPath);
                 modelTools.addElement(tool);
                 applicationManager.addApplication(tool);
                 jsonSerializer.saveData();
@@ -68,7 +69,7 @@ public class LaunchOfExileMain {
         });
 
         btnRemoveTool.addActionListener(e -> {
-            String tool = listTools.getSelectedValue();
+            UriWrapper tool = listTools.getSelectedValue();
 
             if (tool != null) {
                 modelTools.removeElement(tool);
@@ -78,9 +79,10 @@ public class LaunchOfExileMain {
         });
 
         btnAddWebsite.addActionListener(e -> {
-            String website = JOptionPane.showInputDialog("Insert URL to add:");
+            String websiteUrl = JOptionPane.showInputDialog("Insert URL to add:");
 
-            if (website != null && !website.isBlank()) {
+            if (!websiteUrl.isBlank()) {
+                UriWrapper website = new UriWrapper(websiteUrl);
                 modelWebsites.addElement(website);
                 websiteManager.addWebsite(website);
                 jsonSerializer.saveData();
@@ -88,7 +90,7 @@ public class LaunchOfExileMain {
         });
 
         btnRemoveWebsite.addActionListener(e -> {
-            String website = listWebsites.getSelectedValue();
+            UriWrapper website = listWebsites.getSelectedValue();
 
             if (website != null) {
                 modelWebsites.removeElement(website);

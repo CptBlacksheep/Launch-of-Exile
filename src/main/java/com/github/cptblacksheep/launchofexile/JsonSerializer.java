@@ -1,6 +1,7 @@
 package com.github.cptblacksheep.launchofexile;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -9,7 +10,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.Objects;
 
 public class JsonSerializer {
     private static final String FILENAME = "data.json";
@@ -22,8 +23,8 @@ public class JsonSerializer {
     private WebsiteManager websiteManager;
 
     public JsonSerializer(ApplicationManager applicationManager, WebsiteManager websiteManager) {
-        this.applicationManager = applicationManager;
-        this.websiteManager = websiteManager;
+        this.applicationManager = Objects.requireNonNull(applicationManager);
+        this.websiteManager = Objects.requireNonNull(websiteManager);
     }
 
     public void saveData() {
@@ -62,13 +63,26 @@ public class JsonSerializer {
             applicationManager.setSelectedPoeVersion(poeVersion);
 
             part = jsonNode.path("applications");
-            ArrayList<String> applications = new ObjectMapper().readerForListOf(String.class).readValue(part);
-            applicationManager.setApplications(applications);
+            part.forEach(subNode -> {
+                try {
+                    UriWrapper application = mapper.treeToValue(subNode, UriWrapper.class);
+                    applicationManager.addApplication(application);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
             part = jsonNode.path("websites");
-            ArrayList<String> websites = new ObjectMapper().readerForListOf(String.class).readValue(part);
-            websiteManager.setWebsites(websites);
-        } catch (IOException | IllegalArgumentException | NullPointerException ex) {
+            part.forEach(subNode -> {
+                try {
+                    UriWrapper website = mapper.treeToValue(subNode, UriWrapper.class);
+                    websiteManager.addWebsite(website);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+        } catch (IOException | RuntimeException ex) {
             JOptionPane.showMessageDialog(null, "Failed to load data",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -79,7 +93,7 @@ public class JsonSerializer {
     }
 
     public void setApplicationManager(ApplicationManager applicationManager) {
-        this.applicationManager = applicationManager;
+        this.applicationManager = Objects.requireNonNull(applicationManager);
     }
 
     public WebsiteManager getWebsiteManager() {
@@ -87,7 +101,7 @@ public class JsonSerializer {
     }
 
     public void setWebsiteManager(WebsiteManager websiteManager) {
-        this.websiteManager = websiteManager;
+        this.websiteManager = Objects.requireNonNull(websiteManager);
     }
 
 }

@@ -4,15 +4,20 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ApplicationManager {
     private static final String POE_STEAM_ID = "238960";
-    private ArrayList<String> applications = new ArrayList<>();
+    private ArrayList<UriWrapper> applications = new ArrayList<>();
     private String poeExeLocation = "";
     private PoeVersion selectedPoeVersion = PoeVersion.STEAM;
 
-    public static void startApplication(String applicationPath) throws IOException {
-        new ProcessBuilder(applicationPath).start();
+    public static void startApplication(String applicationUri) throws IOException {
+        new ProcessBuilder(applicationUri).start();
+    }
+
+    public static void startApplication(UriWrapper application) throws IOException {
+        startApplication(application.getUri());
     }
 
     public static void startSteamGameById(String id) throws IOException {
@@ -48,20 +53,20 @@ public class ApplicationManager {
         }
     }
 
-    public ArrayList<String> getApplications() {
+    public ArrayList<UriWrapper> getApplications() {
         return applications;
     }
 
-    public void setApplications(ArrayList<String> applications) {
-        this.applications = applications;
+    public void setApplications(ArrayList<UriWrapper> applications) {
+        this.applications = Objects.requireNonNull(applications);
     }
 
-    public void addApplication(String applicationPath) {
-        applications.add(applicationPath);
+    public void addApplication(UriWrapper application) {
+        applications.add(Objects.requireNonNull(application));
     }
 
-    public void removeApplication(String applicationPath) {
-        applications.remove(applicationPath);
+    public void removeApplication(UriWrapper application) {
+        applications.remove(application);
     }
 
     public String getPoeExeLocation() {
@@ -69,7 +74,7 @@ public class ApplicationManager {
     }
 
     public void setPoeExeLocation(String poeExeLocation) {
-        this.poeExeLocation = poeExeLocation;
+        this.poeExeLocation = Objects.requireNonNull(poeExeLocation);
     }
 
     public PoeVersion getSelectedPoeVersion() {
@@ -77,6 +82,6 @@ public class ApplicationManager {
     }
 
     public void setSelectedPoeVersion(PoeVersion selectedPoeVersion) {
-        this.selectedPoeVersion = selectedPoeVersion;
+        this.selectedPoeVersion = Objects.requireNonNull(selectedPoeVersion);
     }
 }
