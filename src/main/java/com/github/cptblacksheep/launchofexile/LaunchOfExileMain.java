@@ -82,7 +82,7 @@ public class LaunchOfExileMain {
         btnAddWebsite.addActionListener(e -> {
             String websiteUrl = JOptionPane.showInputDialog("Insert URL to add:");
 
-            if (!websiteUrl.isBlank()) {
+            if (websiteUrl != null && !websiteUrl.isBlank()) {
                 UriWrapper website = new UriWrapper(websiteUrl);
                 modelWebsites.addElement(website);
                 websiteManager.addWebsite(website);
