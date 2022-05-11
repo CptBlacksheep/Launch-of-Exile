@@ -10,7 +10,8 @@ public enum PoeVersion {
         this.displayName = displayName;
     }
 
-    public String getDisplayName() {
+    @Override
+    public String toString() {
         return displayName;
     }
 }

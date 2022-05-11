@@ -24,7 +24,7 @@ public class LaunchOfExileMain {
     private JLabel lblWebsites;
     private JButton btnAddWebsite;
     private JButton btnRemoveWebsite;
-    private JComboBox<String> comboBoxVersion;
+    private JComboBox<PoeVersion> comboBoxVersion;
     private JLabel lblVersion;
     private JScrollPane scrollPaneTools;
     private JScrollPane scrollPaneWebsites;
@@ -46,8 +46,8 @@ public class LaunchOfExileMain {
         websiteManager = new WebsiteManager();
         jsonSerializer = new JsonSerializer(applicationManager, websiteManager);
 
-        comboBoxVersion.addItem(PoeVersion.STEAM.getDisplayName());
-        comboBoxVersion.addItem(PoeVersion.STANDALONE.getDisplayName());
+        comboBoxVersion.addItem(PoeVersion.STEAM);
+        comboBoxVersion.addItem(PoeVersion.STANDALONE);
 
         loadData();
 
@@ -156,19 +156,19 @@ public class LaunchOfExileMain {
         modelTools.addAll(applicationManager.getApplications());
         modelWebsites.addAll(websiteManager.getWebsites());
         tfPoeExeLocation.setText(applicationManager.getPoeExeLocation());
-        comboBoxVersion.setSelectedItem(applicationManager.getSelectedPoeVersion().getDisplayName());
+        comboBoxVersion.setSelectedItem(applicationManager.getSelectedPoeVersion());
         setElementVisibilityBasedOnComboBoxVersion();
     }
 
     private void setElementVisibilityBasedOnComboBoxVersion() {
-        String selection = (String) comboBoxVersion.getSelectedItem();
+        PoeVersion selection = (PoeVersion) comboBoxVersion.getSelectedItem();
 
-        if (Objects.equals(selection, PoeVersion.STEAM.getDisplayName())) {
+        if (Objects.equals(selection, PoeVersion.STEAM)) {
             lblPoeExeLocation.setVisible(false);
             tfPoeExeLocation.setVisible(false);
             btnSetPoeExeLocation.setVisible(false);
             applicationManager.setSelectedPoeVersion(PoeVersion.STEAM);
-        } else if (Objects.equals(selection, PoeVersion.STANDALONE.getDisplayName())) {
+        } else if (Objects.equals(selection, PoeVersion.STANDALONE)) {
             lblPoeExeLocation.setVisible(true);
             tfPoeExeLocation.setVisible(true);
             btnSetPoeExeLocation.setVisible(true);
