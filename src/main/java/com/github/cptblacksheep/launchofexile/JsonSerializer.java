@@ -13,7 +13,8 @@ import java.util.ArrayList;
 
 public class JsonSerializer {
     private static final String FILENAME = "data.json";
-    private String filepath;
+    private static final String FILEPATH =
+            System.getProperty("user.home") + "\\AppData\\Local\\Launch of Exile\\" + FILENAME;
 
     @JsonUnwrapped
     private ApplicationManager applicationManager;
@@ -23,7 +24,6 @@ public class JsonSerializer {
     public JsonSerializer(ApplicationManager applicationManager, WebsiteManager websiteManager) {
         this.applicationManager = applicationManager;
         this.websiteManager = websiteManager;
-        filepath = System.getProperty("user.home") + File.separator + "Launch of Exile" + File.separator + FILENAME;
     }
 
     public void saveData() {
@@ -31,7 +31,7 @@ public class JsonSerializer {
         ObjectWriter prettyWriter = objectMapper.writerWithDefaultPrettyPrinter();
 
         try {
-            prettyWriter.writeValue(Path.of(filepath).toFile(), this);
+            prettyWriter.writeValue(Path.of(FILEPATH).toFile(), this);
         } catch (IOException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Failed to save data",
@@ -41,9 +41,10 @@ public class JsonSerializer {
     }
 
     public void loadData() {
-        File file = Path.of(filepath).toFile();
+        File file = Path.of(FILEPATH).toFile();
 
         if (!file.exists()) {
+            //noinspection ResultOfMethodCallIgnored
             file.getParentFile().mkdirs();
             return;
         }
