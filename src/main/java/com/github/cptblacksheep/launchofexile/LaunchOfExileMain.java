@@ -74,27 +74,41 @@ public class LaunchOfExileMain {
 
         btnRemoveTool.addActionListener(e -> {
             int selectedRow = tableTools.getSelectedRow();
+
+            if (selectedRow < 0)
+                return;
+
             UriWrapper tool = modelTools.getUriWrapper(selectedRow);
 
-            if (tool != null) {
-                modelTools.removeUriWrapper(selectedRow);
-                jsonSerializer.saveData();
-            }
+            if (tool == null)
+                return;
+
+            modelTools.removeUriWrapper(selectedRow);
+            jsonSerializer.saveData();
         });
 
         btnEnableDisableTool.addActionListener(e -> {
             int selectedRow = tableTools.getSelectedRow();
+
+            if (selectedRow < 0)
+                return;
+
             UriWrapper tool = modelTools.getUriWrapper(selectedRow);
 
-            if (tool != null) {
-                tool.setEnabled(!tool.isEnabled());
-                tableTools.repaint();
-                jsonSerializer.saveData();
-            }
+            if (tool == null)
+                return;
+
+            tool.setEnabled(!tool.isEnabled());
+            tableTools.repaint();
+            jsonSerializer.saveData();
         });
 
         btnRenameTool.addActionListener(e -> {
             int selectedRow = tableTools.getSelectedRow();
+
+            if (selectedRow < 0)
+                return;
+
             UriWrapper tool = modelTools.getUriWrapper(selectedRow);
 
             if (tool == null)
@@ -116,27 +130,41 @@ public class LaunchOfExileMain {
 
         btnRemoveWebsite.addActionListener(e -> {
             int selectedRow = tableWebsites.getSelectedRow();
+
+            if (selectedRow < 0)
+                return;
+
             UriWrapper website = modelWebsites.getUriWrapper(selectedRow);
 
-            if (website != null) {
-                modelWebsites.removeUriWrapper(selectedRow);
-                jsonSerializer.saveData();
-            }
+            if (website == null)
+                return;
+
+            modelWebsites.removeUriWrapper(selectedRow);
+            jsonSerializer.saveData();
         });
 
         btnEnableDisableWebsite.addActionListener(e -> {
             int selectedRow = tableWebsites.getSelectedRow();
+
+            if (selectedRow < 0)
+                return;
+
             UriWrapper website = modelWebsites.getUriWrapper(selectedRow);
 
-            if (website != null) {
-                website.setEnabled(!website.isEnabled());
-                tableWebsites.repaint();
-                jsonSerializer.saveData();
-            }
+            if (website == null)
+                return;
+
+            website.setEnabled(!website.isEnabled());
+            tableWebsites.repaint();
+            jsonSerializer.saveData();
         });
 
         btnRenameWebsite.addActionListener(e -> {
             int selectedRow = tableWebsites.getSelectedRow();
+
+            if (selectedRow < 0)
+                return;
+
             UriWrapper website = modelWebsites.getUriWrapper(selectedRow);
 
             if (website == null)
@@ -227,7 +255,7 @@ public class LaunchOfExileMain {
         modelTools = new UriWrapperTableModel(applicationManager.getApplications(),
                 "Name", "Path");
         tableTools.setModel(modelTools);
-//        tableTools.setDefaultRenderer(UriWrapper.class, new UriWrapperTableCellRenderer());
+        tableTools.setDefaultRenderer(UriWrapper.class, new UriWrapperTableCellRenderer());
         tableTools.getTableHeader().setReorderingAllowed(false);
         tableTools.getTableHeader().setResizingAllowed(false);
         tableTools.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -239,7 +267,7 @@ public class LaunchOfExileMain {
         modelWebsites = new UriWrapperTableModel(websiteManager.getWebsites(),
                 "Name", "URL");
         tableWebsites.setModel(modelWebsites);
-//        tableWebsites.setDefaultRenderer(UriWrapper.class, new UriWrapperTableCellRenderer());
+        tableWebsites.setDefaultRenderer(UriWrapper.class, new UriWrapperTableCellRenderer());
         tableWebsites.getTableHeader().setReorderingAllowed(false);
         tableWebsites.getTableHeader().setResizingAllowed(false);
         tableWebsites.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -256,12 +284,8 @@ public class LaunchOfExileMain {
         if (newName == null)
             return;
 
-        if (!newName.isBlank()) {
-            uriWrapper.setName(newName);
-            jsonSerializer.saveData();
-        } else
-            JOptionPane.showMessageDialog(null, "Name can't be blank",
-                    "Launch of Exile - Warning", JOptionPane.WARNING_MESSAGE);
+        uriWrapper.setName(newName);
+        jsonSerializer.saveData();
     }
 
     public static void main(String[] args) {
