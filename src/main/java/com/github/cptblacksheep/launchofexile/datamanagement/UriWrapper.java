@@ -12,7 +12,7 @@ public class UriWrapper {
     }
 
     public UriWrapper(String uri) {
-        this(uri, uri);
+        this(uri, "");
     }
 
     public UriWrapper(String uri, String name) {

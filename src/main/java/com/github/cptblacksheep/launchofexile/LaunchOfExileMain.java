@@ -1,7 +1,8 @@
 package com.github.cptblacksheep.launchofexile;
 
 import com.formdev.flatlaf.FlatLightLaf;
-import com.github.cptblacksheep.launchofexile.components.UriWrapperListCellRenderer;
+import com.github.cptblacksheep.launchofexile.components.UriWrapperTableCellRenderer;
+import com.github.cptblacksheep.launchofexile.components.UriWrapperTableModel;
 import com.github.cptblacksheep.launchofexile.datamanagement.*;
 
 import javax.swing.*;
@@ -14,11 +15,11 @@ public class LaunchOfExileMain {
     private final ApplicationManager applicationManager;
     private final WebsiteManager websiteManager;
     private final JsonSerializer jsonSerializer;
-    private final DefaultListModel<UriWrapper> modelTools;
-    private final DefaultListModel<UriWrapper> modelWebsites;
+    private UriWrapperTableModel modelTools;
+    private UriWrapperTableModel modelWebsites;
     private JPanel panelMain;
-    private JList<UriWrapper> listTools;
-    private JList<UriWrapper> listWebsites;
+    private JTable tableTools;
+    private JTable tableWebsites;
     private JButton btnLaunch;
     private JButton btnAddTool;
     private JButton btnRemoveTool;
@@ -43,13 +44,6 @@ public class LaunchOfExileMain {
     private JButton btnRenameWebsite;
 
     private LaunchOfExileMain() {
-        modelTools = new DefaultListModel<>();
-        modelWebsites = new DefaultListModel<>();
-        listTools.setModel(modelTools);
-        listWebsites.setModel(modelWebsites);
-        listTools.setCellRenderer(new UriWrapperListCellRenderer());
-        listWebsites.setCellRenderer(new UriWrapperListCellRenderer());
-
         applicationManager = new ApplicationManager();
         websiteManager = new WebsiteManager();
         jsonSerializer = new JsonSerializer(applicationManager, websiteManager);
@@ -58,6 +52,8 @@ public class LaunchOfExileMain {
         comboBoxVersion.addItem(PoeVersion.STANDALONE);
 
         loadData();
+
+        createJTablesAndModels();
 
         btnAddTool.addActionListener(e -> {
             JFileChooser fc = new JFileChooser();
@@ -70,40 +66,41 @@ public class LaunchOfExileMain {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 String toolPath = fc.getSelectedFile().getAbsolutePath();
                 UriWrapper tool = new UriWrapper(toolPath);
-                modelTools.addElement(tool);
-                applicationManager.addApplication(tool);
+                modelTools.addUriWrapper(tool);
                 jsonSerializer.saveData();
             }
         });
 
         btnRemoveTool.addActionListener(e -> {
-            UriWrapper tool = listTools.getSelectedValue();
+            int selectedRow = tableTools.getSelectedRow();
+            UriWrapper tool = modelTools.getUriWrapper(selectedRow);
 
             if (tool != null) {
-                modelTools.removeElement(tool);
-                applicationManager.removeApplication(tool);
+                modelTools.removeUriWrapper(selectedRow);
                 jsonSerializer.saveData();
             }
         });
 
         btnEnableDisableTool.addActionListener(e -> {
-            UriWrapper tool = listTools.getSelectedValue();
+            int selectedRow = tableTools.getSelectedRow();
+            UriWrapper tool = modelTools.getUriWrapper(selectedRow);
 
             if (tool != null) {
                 tool.setEnabled(!tool.isEnabled());
-                listTools.repaint();
+                tableTools.repaint();
                 jsonSerializer.saveData();
             }
         });
 
         btnRenameTool.addActionListener(e -> {
-            UriWrapper tool = listTools.getSelectedValue();
+            int selectedRow = tableTools.getSelectedRow();
+            UriWrapper tool = modelTools.getUriWrapper(selectedRow);
 
             if (tool == null)
                 return;
 
             rename(tool);
-            listTools.repaint();
+            tableTools.repaint();
         });
 
         btnAddWebsite.addActionListener(e -> {
@@ -111,40 +108,41 @@ public class LaunchOfExileMain {
 
             if (websiteUrl != null && !websiteUrl.isBlank()) {
                 UriWrapper website = new UriWrapper(websiteUrl);
-                modelWebsites.addElement(website);
-                websiteManager.addWebsite(website);
+                modelWebsites.addUriWrapper(website);
                 jsonSerializer.saveData();
             }
         });
 
         btnRemoveWebsite.addActionListener(e -> {
-            UriWrapper website = listWebsites.getSelectedValue();
+            int selectedRow = tableWebsites.getSelectedRow();
+            UriWrapper website = modelWebsites.getUriWrapper(selectedRow);
 
             if (website != null) {
-                modelWebsites.removeElement(website);
-                websiteManager.removeWebsite(website);
+                modelWebsites.removeUriWrapper(selectedRow);
                 jsonSerializer.saveData();
             }
         });
 
         btnEnableDisableWebsite.addActionListener(e -> {
-            UriWrapper website = listWebsites.getSelectedValue();
+            int selectedRow = tableWebsites.getSelectedRow();
+            UriWrapper website = modelWebsites.getUriWrapper(selectedRow);
 
             if (website != null) {
                 website.setEnabled(!website.isEnabled());
-                listWebsites.repaint();
+                tableWebsites.repaint();
                 jsonSerializer.saveData();
             }
         });
 
         btnRenameWebsite.addActionListener(e -> {
-            UriWrapper website = listWebsites.getSelectedValue();
+            int selectedRow = tableWebsites.getSelectedRow();
+            UriWrapper website = modelWebsites.getUriWrapper(selectedRow);
 
             if (website == null)
                 return;
 
             rename(website);
-            listWebsites.repaint();
+            tableWebsites.repaint();
         });
 
         btnSetPoeExeLocation.addActionListener(e -> {
@@ -165,7 +163,7 @@ public class LaunchOfExileMain {
 
         comboBoxVersion.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                setElementVisibilityBasedOnComboBoxVersion();
+                setComponentVisibilityBasedOnComboBoxVersion();
                 jsonSerializer.saveData();
             }
         });
@@ -203,14 +201,12 @@ public class LaunchOfExileMain {
 
     private void loadData() {
         jsonSerializer.loadData();
-        modelTools.addAll(applicationManager.getApplications());
-        modelWebsites.addAll(websiteManager.getWebsites());
         tfPoeExeLocation.setText(applicationManager.getPoeExeLocation());
         comboBoxVersion.setSelectedItem(applicationManager.getSelectedPoeVersion());
-        setElementVisibilityBasedOnComboBoxVersion();
+        setComponentVisibilityBasedOnComboBoxVersion();
     }
 
-    private void setElementVisibilityBasedOnComboBoxVersion() {
+    private void setComponentVisibilityBasedOnComboBoxVersion() {
         PoeVersion selection = (PoeVersion) comboBoxVersion.getSelectedItem();
 
         if (Objects.equals(selection, PoeVersion.STEAM)) {
@@ -224,6 +220,25 @@ public class LaunchOfExileMain {
             btnSetPoeExeLocation.setVisible(true);
             applicationManager.setSelectedPoeVersion(PoeVersion.STANDALONE);
         }
+    }
+
+    private void createJTablesAndModels() {
+        modelTools = new UriWrapperTableModel(applicationManager.getApplications(),
+                "Name", "Path");
+        tableTools.setModel(modelTools);
+//        tableTools.setDefaultRenderer(UriWrapper.class, new UriWrapperTableCellRenderer());
+        tableTools.getTableHeader().setReorderingAllowed(false);
+        tableTools.getTableHeader().setResizingAllowed(false);
+        tableTools.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        modelWebsites = new UriWrapperTableModel(websiteManager.getWebsites(),
+                "Name", "URL");
+        tableWebsites.setModel(modelWebsites);
+//        tableWebsites.setDefaultRenderer(UriWrapper.class, new UriWrapperTableCellRenderer());
+        tableWebsites.getTableHeader().setReorderingAllowed(false);
+        tableWebsites.getTableHeader().setResizingAllowed(false);
+        tableWebsites.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
     }
 
     private void rename(UriWrapper uriWrapper) {

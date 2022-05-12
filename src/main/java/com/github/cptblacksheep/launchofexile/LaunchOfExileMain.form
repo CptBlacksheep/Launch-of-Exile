@@ -16,17 +16,19 @@
         </constraints>
         <properties>
           <focusable value="false"/>
+          <horizontalScrollBarPolicy value="30"/>
           <verticalScrollBarPolicy value="20"/>
         </properties>
         <border type="none"/>
         <children>
-          <component id="37d00" class="javax.swing.JList" binding="listTools">
+          <component id="fe7e4" class="javax.swing.JTable" binding="tableTools">
             <constraints/>
             <properties>
               <autoscrolls value="true"/>
+              <fillsViewportHeight value="false"/>
               <focusable value="true"/>
-              <model/>
-              <selectionMode value="0"/>
+              <showHorizontalLines value="false"/>
+              <showVerticalLines value="false"/>
             </properties>
           </component>
         </children>
@@ -37,13 +39,15 @@
         </constraints>
         <properties>
           <focusable value="false"/>
+          <horizontalScrollBarPolicy value="30"/>
         </properties>
         <border type="none"/>
         <children>
-          <component id="50863" class="javax.swing.JList" binding="listWebsites">
+          <component id="32696" class="javax.swing.JTable" binding="tableWebsites">
             <constraints/>
             <properties>
-              <selectionMode value="0"/>
+              <showHorizontalLines value="false"/>
+              <showVerticalLines value="false"/>
             </properties>
           </component>
         </children>
@@ -217,15 +221,6 @@
           </component>
         </children>
       </grid>
-      <component id="3befe" class="javax.swing.JButton" binding="btnSetPoeExeLocation">
-        <constraints>
-          <grid row="13" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Set location"/>
-          <visible value="true"/>
-        </properties>
-      </component>
       <vspacer id="47224">
         <constraints>
           <grid row="13" column="4" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
@@ -279,6 +274,15 @@
         </constraints>
         <properties>
           <text value="Rename selected website"/>
+        </properties>
+      </component>
+      <component id="3befe" class="javax.swing.JButton" binding="btnSetPoeExeLocation">
+        <constraints>
+          <grid row="13" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Set location"/>
+          <visible value="true"/>
         </properties>
       </component>
     </children>
