@@ -72,4 +72,11 @@ public class UriWrapperTableModel extends AbstractTableModel implements TableMod
         fireTableRowsDeleted(row, row);
     }
 
+    @Override
+    public Class<?> getColumnClass(int column) {
+        return switch (column) {
+            case 0, 1 -> String.class;
+            default -> Object.class;
+        };
+    }
 }

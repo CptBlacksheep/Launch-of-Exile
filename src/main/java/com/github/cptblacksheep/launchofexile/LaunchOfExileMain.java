@@ -254,11 +254,15 @@ public class LaunchOfExileMain {
     private void createJTablesAndModels() {
         modelTools = new UriWrapperTableModel(applicationManager.getApplications(),
                 "Name", "Path");
+
         tableTools.setModel(modelTools);
-        tableTools.setDefaultRenderer(UriWrapper.class, new UriWrapperTableCellRenderer());
         tableTools.getTableHeader().setReorderingAllowed(false);
         tableTools.getTableHeader().setResizingAllowed(false);
         tableTools.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        UriWrapperTableCellRenderer renderer = new UriWrapperTableCellRenderer();
+        tableTools.setDefaultRenderer(String.class, renderer);
+
         TableColumn toolsNameColumn = tableTools.getColumnModel().getColumn(0);
         TableColumn pathNameColumn = tableTools.getColumnModel().getColumn(1);
         toolsNameColumn.setMinWidth(150);
@@ -266,11 +270,13 @@ public class LaunchOfExileMain {
 
         modelWebsites = new UriWrapperTableModel(websiteManager.getWebsites(),
                 "Name", "URL");
+
         tableWebsites.setModel(modelWebsites);
-        tableWebsites.setDefaultRenderer(UriWrapper.class, new UriWrapperTableCellRenderer());
         tableWebsites.getTableHeader().setReorderingAllowed(false);
         tableWebsites.getTableHeader().setResizingAllowed(false);
         tableWebsites.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableWebsites.setDefaultRenderer(String.class, renderer);
+
         TableColumn websiteNameColumn = tableWebsites.getColumnModel().getColumn(0);
         TableColumn websiteUrlColumn = tableWebsites.getColumnModel().getColumn(1);
         websiteNameColumn.setMinWidth(150);
