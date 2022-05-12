@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class ApplicationManager {
@@ -51,6 +52,11 @@ public class ApplicationManager {
                     null, "Failed to launch Path of Exile",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public void sortApplications() {
+        applications.sort(Comparator.comparing((UriWrapper uriWrapper) -> !uriWrapper.isEnabled())
+                .thenComparing(UriWrapper::getName));
     }
 
     public ArrayList<UriWrapper> getApplications() {

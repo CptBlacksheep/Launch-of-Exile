@@ -86,6 +86,9 @@ public class JsonSerializer {
             JOptionPane.showMessageDialog(null, "Failed to load data",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         }
+
+        applicationManager.sortApplications();
+        websiteManager.sortWebsites();
     }
 
     public ApplicationManager getApplicationManager() {

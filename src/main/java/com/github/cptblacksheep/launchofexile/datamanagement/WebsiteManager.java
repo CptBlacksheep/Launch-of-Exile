@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class WebsiteManager {
@@ -31,6 +32,11 @@ public class WebsiteManager {
         });
     }
 
+    public void sortWebsites() {
+        websites.sort(Comparator.comparing((UriWrapper uriWrapper) -> !uriWrapper.isEnabled())
+                .thenComparing(UriWrapper::getName));
+    }
+
     public ArrayList<UriWrapper> getWebsites() {
         return websites;
     }
@@ -46,4 +52,5 @@ public class WebsiteManager {
     public void removeWebsite(UriWrapper website) {
         websites.remove(website);
     }
+
 }
