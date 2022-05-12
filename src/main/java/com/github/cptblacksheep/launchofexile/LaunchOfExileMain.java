@@ -7,6 +7,7 @@ import com.github.cptblacksheep.launchofexile.datamanagement.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.Objects;
@@ -230,6 +231,10 @@ public class LaunchOfExileMain {
         tableTools.getTableHeader().setReorderingAllowed(false);
         tableTools.getTableHeader().setResizingAllowed(false);
         tableTools.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        TableColumn toolsNameColumn = tableTools.getColumnModel().getColumn(0);
+        TableColumn pathNameColumn = tableTools.getColumnModel().getColumn(1);
+        toolsNameColumn.setMinWidth(150);
+        pathNameColumn.setMinWidth(300);
 
         modelWebsites = new UriWrapperTableModel(websiteManager.getWebsites(),
                 "Name", "URL");
@@ -238,6 +243,10 @@ public class LaunchOfExileMain {
         tableWebsites.getTableHeader().setReorderingAllowed(false);
         tableWebsites.getTableHeader().setResizingAllowed(false);
         tableWebsites.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        TableColumn websiteNameColumn = tableWebsites.getColumnModel().getColumn(0);
+        TableColumn websiteUrlColumn = tableWebsites.getColumnModel().getColumn(1);
+        websiteNameColumn.setMinWidth(150);
+        websiteUrlColumn.setMinWidth(300);
 
     }
 
