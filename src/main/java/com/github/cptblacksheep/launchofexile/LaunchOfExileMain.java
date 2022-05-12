@@ -1,6 +1,7 @@
 package com.github.cptblacksheep.launchofexile;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import com.github.cptblacksheep.launchofexile.components.UriWrapperListCellRenderer;
 import com.github.cptblacksheep.launchofexile.datamanagement.*;
 
 import javax.swing.*;
