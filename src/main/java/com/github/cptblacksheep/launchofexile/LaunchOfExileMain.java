@@ -250,9 +250,9 @@ public class LaunchOfExileMain {
         frame.setContentPane(new LaunchOfExileMain().panelMain);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setSize(new Dimension(700, 500));
+        frame.setLocationRelativeTo(null);
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
                 LaunchOfExileMain.class.getClassLoader().getResource("Launch_of_Exile.png")));
         frame.setVisible(true);
