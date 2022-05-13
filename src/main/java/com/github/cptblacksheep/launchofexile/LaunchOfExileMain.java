@@ -1,5 +1,8 @@
 package com.github.cptblacksheep.launchofexile;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.github.cptblacksheep.launchofexile.components.UriWrapperTableCellRenderer;
 import com.github.cptblacksheep.launchofexile.components.UriWrapperTableModel;
@@ -12,13 +15,16 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Objects;
 
 public class LaunchOfExileMain {
     private final ApplicationManager applicationManager;
     private final WebsiteManager websiteManager;
     private final JsonSerializer jsonSerializer;
-    private final Settings settings;
+    private static final Settings settings = new Settings();
     private UriWrapperTableModel modelTools;
     private UriWrapperTableModel modelWebsites;
     private JPanel panelMain;
@@ -48,7 +54,6 @@ public class LaunchOfExileMain {
     private JButton btnRenameWebsite;
 
     private LaunchOfExileMain() {
-        settings = new Settings();
         applicationManager = new ApplicationManager(settings);
         websiteManager = new WebsiteManager();
         jsonSerializer = new JsonSerializer(applicationManager, websiteManager, settings);
@@ -244,7 +249,29 @@ public class LaunchOfExileMain {
     }
 
     public static void initialize() {
-        FlatLightLaf.setup();
+        //Scuffed way to read darkmode from settings file
+        String settingsPath = System.getProperty("user.home") + "\\AppData\\Local\\Launch of Exile\\settings.json";
+        File file = Path.of(settingsPath).toFile();
+
+        if (file.exists()) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode jsonNode = mapper.readTree(file);
+
+                JsonNode part = jsonNode.get("darkModeEnabled");
+
+                boolean darkMode = part.booleanValue();
+                settings.setDarkModeEnabled(darkMode);
+
+            } catch (IOException | RuntimeException ex) {
+                // Do nothing, we're good
+            }
+        }
+
+        if (settings.getDarkModeEnabled())
+            FlatDarculaLaf.setup();
+        else
+            FlatLightLaf.setup();
 
         JFrame frame = new JFrame("Launch of Exile");
         frame.setContentPane(new LaunchOfExileMain().panelMain);
@@ -256,7 +283,6 @@ public class LaunchOfExileMain {
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
                 LaunchOfExileMain.class.getClassLoader().getResource("Launch_of_Exile.png")));
         frame.setVisible(true);
-
     }
 
     private void loadDataAndSettings() {

@@ -122,6 +122,11 @@ public class JsonSerializer {
             PoeVersion poeVersion = mapper.convertValue(part.textValue(), PoeVersion.class);
             settings.setSelectedPoeVersion(poeVersion);
 
+            part = jsonNode.get("darkModeEnabled");
+
+            boolean darkMode = part.booleanValue();
+            settings.setDarkModeEnabled(darkMode);
+
         } catch (IOException | RuntimeException ex) {
             JOptionPane.showMessageDialog(null, "Failed to load settings",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
