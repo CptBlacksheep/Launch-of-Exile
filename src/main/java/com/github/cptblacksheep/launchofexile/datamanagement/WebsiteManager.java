@@ -26,7 +26,7 @@ public class WebsiteManager {
                 openWebsite(website);
             } catch (URISyntaxException | IOException e) {
                 JOptionPane.showMessageDialog(
-                        null, "Failed to open website: " + website,
+                        null, "Failed to open website: " + website.getUri(),
                         "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             }
         });

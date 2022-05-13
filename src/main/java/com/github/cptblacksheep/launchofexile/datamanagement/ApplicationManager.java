@@ -42,7 +42,7 @@ public class ApplicationManager {
                 startApplication(application);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(
-                        null, "Failed to launch application " + application,
+                        null, "Failed to launch application " + application.getUri(),
                         "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             }
         });
