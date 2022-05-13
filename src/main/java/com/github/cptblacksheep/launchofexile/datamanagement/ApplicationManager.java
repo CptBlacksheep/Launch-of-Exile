@@ -1,17 +1,24 @@
 package com.github.cptblacksheep.launchofexile.datamanagement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.swing.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Set;
 
 public class ApplicationManager {
     private static final String POE_STEAM_ID = "238960";
     private ArrayList<UriWrapper> applications = new ArrayList<>();
-    private String poeExeLocation = "";
-    private PoeVersion selectedPoeVersion = PoeVersion.STEAM;
+    @JsonIgnore
+    private Settings settings;
+
+    public ApplicationManager(Settings settings) {
+        this.settings = Objects.requireNonNull(settings);
+    }
 
     public static void startApplication(String applicationUri) throws IOException {
         new ProcessBuilder(applicationUri).start();
@@ -45,7 +52,7 @@ public class ApplicationManager {
         try {
             switch (poeVersion) {
                 case STEAM -> startSteamGameById(POE_STEAM_ID);
-                case STANDALONE -> startApplication(poeExeLocation);
+                case STANDALONE -> startApplication(settings.getPoeExeLocation());
             }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(
@@ -75,19 +82,11 @@ public class ApplicationManager {
         applications.remove(application);
     }
 
-    public String getPoeExeLocation() {
-        return poeExeLocation;
+    public Settings getSettings() {
+        return settings;
     }
 
-    public void setPoeExeLocation(String poeExeLocation) {
-        this.poeExeLocation = Objects.requireNonNull(poeExeLocation);
-    }
-
-    public PoeVersion getSelectedPoeVersion() {
-        return selectedPoeVersion;
-    }
-
-    public void setSelectedPoeVersion(PoeVersion selectedPoeVersion) {
-        this.selectedPoeVersion = Objects.requireNonNull(selectedPoeVersion);
+    public void setSettings(Settings settings) {
+        this.settings = Objects.requireNonNull(settings);
     }
 }

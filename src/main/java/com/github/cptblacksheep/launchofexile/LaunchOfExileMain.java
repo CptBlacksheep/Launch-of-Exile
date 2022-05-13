@@ -18,6 +18,7 @@ public class LaunchOfExileMain {
     private final ApplicationManager applicationManager;
     private final WebsiteManager websiteManager;
     private final JsonSerializer jsonSerializer;
+    private final Settings settings;
     private UriWrapperTableModel modelTools;
     private UriWrapperTableModel modelWebsites;
     private JPanel panelMain;
@@ -47,14 +48,15 @@ public class LaunchOfExileMain {
     private JButton btnRenameWebsite;
 
     private LaunchOfExileMain() {
-        applicationManager = new ApplicationManager();
+        settings = new Settings();
+        applicationManager = new ApplicationManager(settings);
         websiteManager = new WebsiteManager();
-        jsonSerializer = new JsonSerializer(applicationManager, websiteManager);
+        jsonSerializer = new JsonSerializer(applicationManager, websiteManager, settings);
 
         comboBoxVersion.addItem(PoeVersion.STEAM);
         comboBoxVersion.addItem(PoeVersion.STANDALONE);
 
-        loadData();
+        loadDataAndSettings();
 
         createJTablesAndModels();
 
@@ -201,27 +203,27 @@ public class LaunchOfExileMain {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 String exeLocation = fc.getSelectedFile().getAbsolutePath();
                 tfPoeExeLocation.setText(exeLocation);
-                applicationManager.setPoeExeLocation(exeLocation);
-                jsonSerializer.saveData();
+                settings.setPoeExeLocation(exeLocation);
+                jsonSerializer.saveSettings();
             }
         });
 
         comboBoxVersion.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 setComponentVisibilityBasedOnComboBoxVersion();
-                jsonSerializer.saveData();
+                jsonSerializer.saveSettings();
             }
         });
 
         btnLaunch.addActionListener(e -> {
             websiteManager.openAllEnabledWebsites();
             applicationManager.startAllEnabledApplications();
-            applicationManager.startPoe(applicationManager.getSelectedPoeVersion());
+            applicationManager.startPoe(settings.getSelectedPoeVersion());
             System.exit(0);
         });
 
         btnLaunchPoeOnly.addActionListener(e -> {
-            applicationManager.startPoe(applicationManager.getSelectedPoeVersion());
+            applicationManager.startPoe(settings.getSelectedPoeVersion());
             System.exit(0);
         });
 
@@ -257,10 +259,10 @@ public class LaunchOfExileMain {
 
     }
 
-    private void loadData() {
-        jsonSerializer.loadData();
-        tfPoeExeLocation.setText(applicationManager.getPoeExeLocation());
-        comboBoxVersion.setSelectedItem(applicationManager.getSelectedPoeVersion());
+    private void loadDataAndSettings() {
+        jsonSerializer.loadDataAndSettings();
+        tfPoeExeLocation.setText(settings.getPoeExeLocation());
+        comboBoxVersion.setSelectedItem(settings.getSelectedPoeVersion());
         setComponentVisibilityBasedOnComboBoxVersion();
     }
 
@@ -271,12 +273,12 @@ public class LaunchOfExileMain {
             lblPoeExeLocation.setVisible(false);
             tfPoeExeLocation.setVisible(false);
             btnSetPoeExeLocation.setVisible(false);
-            applicationManager.setSelectedPoeVersion(PoeVersion.STEAM);
+            settings.setSelectedPoeVersion(PoeVersion.STEAM);
         } else if (Objects.equals(selection, PoeVersion.STANDALONE)) {
             lblPoeExeLocation.setVisible(true);
             tfPoeExeLocation.setVisible(true);
             btnSetPoeExeLocation.setVisible(true);
-            applicationManager.setSelectedPoeVersion(PoeVersion.STANDALONE);
+            settings.setSelectedPoeVersion(PoeVersion.STANDALONE);
         }
     }
 
