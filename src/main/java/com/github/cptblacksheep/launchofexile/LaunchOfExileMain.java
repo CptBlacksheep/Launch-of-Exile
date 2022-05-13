@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.util.Objects;
 
@@ -69,6 +71,7 @@ public class LaunchOfExileMain {
                 UriWrapper tool = new UriWrapper(toolPath);
                 modelTools.addUriWrapper(tool);
                 jsonSerializer.saveData();
+                tableTools.setRowSelectionInterval(modelTools.getRowCount() - 1, modelTools.getRowCount() - 1);
             }
         });
 
@@ -85,6 +88,9 @@ public class LaunchOfExileMain {
 
             modelTools.removeUriWrapper(selectedRow);
             jsonSerializer.saveData();
+
+            if (selectedRow > 0)
+                tableTools.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
         });
 
         btnEnableDisableTool.addActionListener(e -> {
@@ -101,6 +107,7 @@ public class LaunchOfExileMain {
             tool.setEnabled(!tool.isEnabled());
             tableTools.repaint();
             jsonSerializer.saveData();
+            tableTools.setRowSelectionInterval(selectedRow, selectedRow);
         });
 
         btnRenameTool.addActionListener(e -> {
@@ -116,16 +123,19 @@ public class LaunchOfExileMain {
 
             rename(tool);
             tableTools.repaint();
+            tableTools.setRowSelectionInterval(selectedRow, selectedRow);
         });
 
         btnAddWebsite.addActionListener(e -> {
             String websiteUrl = JOptionPane.showInputDialog("Insert URL to add:");
 
-            if (websiteUrl != null && !websiteUrl.isBlank()) {
-                UriWrapper website = new UriWrapper(websiteUrl);
-                modelWebsites.addUriWrapper(website);
-                jsonSerializer.saveData();
-            }
+            if (websiteUrl == null || websiteUrl.isBlank())
+                return;
+
+            UriWrapper website = new UriWrapper(websiteUrl);
+            modelWebsites.addUriWrapper(website);
+            jsonSerializer.saveData();
+            tableWebsites.setRowSelectionInterval(modelWebsites.getRowCount() - 1, modelWebsites.getRowCount() - 1);
         });
 
         btnRemoveWebsite.addActionListener(e -> {
@@ -141,6 +151,9 @@ public class LaunchOfExileMain {
 
             modelWebsites.removeUriWrapper(selectedRow);
             jsonSerializer.saveData();
+
+            if (selectedRow > 0)
+                tableWebsites.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
         });
 
         btnEnableDisableWebsite.addActionListener(e -> {
@@ -157,6 +170,7 @@ public class LaunchOfExileMain {
             website.setEnabled(!website.isEnabled());
             tableWebsites.repaint();
             jsonSerializer.saveData();
+            tableWebsites.setRowSelectionInterval(selectedRow, selectedRow);
         });
 
         btnRenameWebsite.addActionListener(e -> {
@@ -172,6 +186,8 @@ public class LaunchOfExileMain {
 
             rename(website);
             tableWebsites.repaint();
+
+            tableWebsites.setRowSelectionInterval(selectedRow, selectedRow);
         });
 
         btnSetPoeExeLocation.addActionListener(e -> {
@@ -209,6 +225,19 @@ public class LaunchOfExileMain {
             System.exit(0);
         });
 
+        tableTools.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                tableTools.clearSelection();
+            }
+        });
+
+        tableWebsites.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                tableWebsites.clearSelection();
+            }
+        });
 
     }
 
