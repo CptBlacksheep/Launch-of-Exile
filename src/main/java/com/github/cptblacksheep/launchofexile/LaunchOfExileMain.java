@@ -64,7 +64,7 @@ public class LaunchOfExileMain {
             JFileChooser fc = new JFileChooser();
             fc.setDialogTitle("Add tool");
             fc.setAcceptAllFileFilterUsed(false);
-            fc.setFileFilter(new FileNameExtensionFilter(".exe", "exe"));
+            fc.setFileFilter(new FileNameExtensionFilter(".exe, .ahk", "exe", "ahk"));
 
             int returnValue = fc.showDialog(null, "Add to tools");
 
