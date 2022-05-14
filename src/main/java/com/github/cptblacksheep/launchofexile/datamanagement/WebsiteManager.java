@@ -26,7 +26,10 @@ public class WebsiteManager {
                 openWebsite(website);
             } catch (URISyntaxException | IOException e) {
                 JOptionPane.showMessageDialog(
-                        null, "Failed to open website: " + website.getUri(),
+                        null, String.format("Failed to open website: %s%n%n "
+                                        + "Possible cause:%n"
+                                        + "- Websites that don't follow the www.xxx.xx scheme are currently not supported"
+                                , website.getUri()),
                         "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             }
         });
