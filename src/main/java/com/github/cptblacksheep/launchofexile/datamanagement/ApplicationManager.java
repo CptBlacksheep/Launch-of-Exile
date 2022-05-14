@@ -58,7 +58,10 @@ public class ApplicationManager {
             }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(
-                    null, "Failed to launch Path of Exile",
+                    null, "Failed to launch Path of Exile\n"
+                            + "It's possible that:\n"
+                            + "- The path has changed (set the new path)\n"
+                            + "- The wrong PoE version is selected",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         }
     }
