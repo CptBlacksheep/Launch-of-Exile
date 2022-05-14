@@ -26,5 +26,11 @@ It's pretty self Explanatory.
 2. Add the tools and website you want to use
 3. launch
 
+### FAQ
+
+- Help, my programm wont start
+  
+  That might be beacause it needs admin rights (.ahk scripts for instance) try to set the launcher to start in admin mode (right click -> properties -> compatibility -> change settings for all users -> start as admin)
+
 ---
 This product isn't affiliated with or endorsed by Grinding Gear Games in any way.
