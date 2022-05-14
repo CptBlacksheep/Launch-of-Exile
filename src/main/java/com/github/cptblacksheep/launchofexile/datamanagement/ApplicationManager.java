@@ -44,7 +44,9 @@ public class ApplicationManager {
                         null, String.format("Failed to launch application: %s%n%n"
                                 + "It's possible that:%n"
                                 + "- The path has changed (remove the tool and re add it)%n"
-                                + "- The application needs admin rights (set the launcher to start in admin mode, visit the FAQ at https://github.com/CptBlacksheep/Launch-of-Exile for more information)", application.getUri()),
+                                + "- The application needs admin rights (set the launcher to start in admin mode, "
+                                + "visit the FAQ at https://github.com/CptBlacksheep/Launch-of-Exile for "
+                                + "more information)", application.getUri()),
                         "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             }
         });
