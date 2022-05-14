@@ -20,17 +20,23 @@ public class WebsiteManager {
         openWebsite(website.getUri());
     }
 
+    private static void openWebsiteWithHttpsPrefix(UriWrapper website) throws URISyntaxException, IOException {
+        openWebsite("https://" + website.getUri());
+    }
+
     public void openAllEnabledWebsites() {
         websites.stream().filter(UriWrapper::isEnabled).forEach(website -> {
             try {
-                openWebsite(website);
+
+                try {
+                    openWebsite(website);
+                } catch (URISyntaxException | IOException ex) {
+                    openWebsiteWithHttpsPrefix(website);
+                }
+
             } catch (URISyntaxException | IOException e) {
                 JOptionPane.showMessageDialog(
-                        null, String.format("Failed to open website: %s%n%n "
-                                        + "Possible cause:%n"
-                                        + "- Websites that don't follow the www.xxx.xx scheme are "
-                                        + "currently not supported"
-                                , website.getUri()),
+                        null, "Failed to open website: " + website.getUri(),
                         "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             }
         });
