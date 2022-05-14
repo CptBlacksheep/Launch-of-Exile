@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.Set;
 
 public class ApplicationManager {
     private static final String POE_STEAM_ID = "238960";
@@ -42,7 +41,10 @@ public class ApplicationManager {
                 startApplication(application);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(
-                        null, "Failed to launch application " + application.getUri(),
+                        null, String.format("Failed to launch application: %s%n%n"
+                                + "It's possible that:%n"
+                                + "-The path has changed (remove the tool and re add it)%n"
+                                + "-The application needs admin rights (set the launcher to start in admin mode, visit the FAQ at https://github.com/CptBlacksheep/Launch-of-Exile for more information)", application.getUri()),
                         "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             }
         });
