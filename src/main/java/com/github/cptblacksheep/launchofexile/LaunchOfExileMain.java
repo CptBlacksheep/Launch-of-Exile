@@ -64,31 +64,7 @@ public class LaunchOfExileMain {
 
         createJTablesAndModels();
 
-        btnAddTool.addActionListener(e -> {
-            JFileChooser fc = new JFileChooser();
-            fc.setDialogTitle("Launch of Exile - Add tool");
-            fc.setAcceptAllFileFilterUsed(false);
-            fc.setFileFilter(new FileNameExtensionFilter(".exe, .ahk", "exe", "ahk"));
-
-            int returnValue = fc.showDialog(null, "Add to tools");
-
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                String name = JOptionPane.showInputDialog(null, "Set name (optional):",
-                        "Launch of Exile - Add tool", JOptionPane.QUESTION_MESSAGE);
-
-                String toolPath = fc.getSelectedFile().getAbsolutePath();
-
-                UriWrapper tool;
-                if (name == null || name.isBlank())
-                    tool = new UriWrapper(toolPath);
-                else
-                    tool = new UriWrapper(toolPath, name);
-
-                modelTools.addUriWrapper(tool);
-                jsonSerializer.saveData();
-                tableTools.setRowSelectionInterval(modelTools.getRowCount() - 1, modelTools.getRowCount() - 1);
-            }
-        });
+        btnAddTool.addActionListener(e -> showAddToolDialog());
 
         btnRemoveTool.addActionListener(e -> {
             int selectedRow = tableTools.getSelectedRow();
@@ -141,9 +117,7 @@ public class LaunchOfExileMain {
             tableTools.setRowSelectionInterval(selectedRow, selectedRow);
         });
 
-        btnAddWebsite.addActionListener(e -> {
-            showAddWebsiteDialog();
-        });
+        btnAddWebsite.addActionListener(e -> showAddWebsiteDialog());
 
         btnRemoveWebsite.addActionListener(e -> {
             int selectedRow = tableWebsites.getSelectedRow();
@@ -197,21 +171,7 @@ public class LaunchOfExileMain {
             tableWebsites.setRowSelectionInterval(selectedRow, selectedRow);
         });
 
-        btnSetPoeExeLocation.addActionListener(e -> {
-            JFileChooser fc = new JFileChooser();
-            fc.setDialogTitle("Launch of Exile - Set PoE .exe location");
-            fc.setAcceptAllFileFilterUsed(false);
-            fc.setFileFilter(new FileNameExtensionFilter(".exe", "exe"));
-
-            int returnValue = fc.showDialog(null, "Set location");
-
-            if (returnValue == JFileChooser.APPROVE_OPTION) {
-                String exeLocation = fc.getSelectedFile().getAbsolutePath();
-                tfPoeExeLocation.setText(exeLocation);
-                settings.setPoeExeLocation(exeLocation);
-                jsonSerializer.saveSettings();
-            }
-        });
+        btnSetPoeExeLocation.addActionListener(e -> showSetPoeLocationDialog());
 
         comboBoxVersion.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -220,9 +180,7 @@ public class LaunchOfExileMain {
             }
         });
 
-        btnLaunch.addActionListener(e -> {
-            launchOpenAllExit();
-        });
+        btnLaunch.addActionListener(e -> launchOpenAllExit());
 
         btnLaunchPoeOnly.addActionListener(e -> {
             applicationManager.startPoe(settings.getSelectedPoeVersion());
@@ -335,6 +293,22 @@ public class LaunchOfExileMain {
         System.exit(0);
     }
 
+    private void showSetPoeLocationDialog() {
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Launch of Exile - Set PoE .exe location");
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.setFileFilter(new FileNameExtensionFilter(".exe", "exe"));
+
+        int returnValue = fc.showDialog(null, "Set location");
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            String exeLocation = fc.getSelectedFile().getAbsolutePath();
+            tfPoeExeLocation.setText(exeLocation);
+            settings.setPoeExeLocation(exeLocation);
+            jsonSerializer.saveSettings();
+        }
+    }
+
     private void showAddWebsiteDialog() {
         JTextField tfUrl = new JTextField();
         JTextField tfName = new JTextField();
@@ -363,6 +337,32 @@ public class LaunchOfExileMain {
         modelWebsites.addUriWrapper(website);
         jsonSerializer.saveData();
         tableWebsites.setRowSelectionInterval(modelWebsites.getRowCount() - 1, modelWebsites.getRowCount() - 1);
+    }
+
+    private void showAddToolDialog() {
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Launch of Exile - Add tool");
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.setFileFilter(new FileNameExtensionFilter(".exe, .ahk", "exe", "ahk"));
+
+        int returnValue = fc.showDialog(null, "Add to tools");
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            String name = JOptionPane.showInputDialog(null, "Set name (optional):",
+                    "Launch of Exile - Add tool", JOptionPane.QUESTION_MESSAGE);
+
+            String toolPath = fc.getSelectedFile().getAbsolutePath();
+
+            UriWrapper tool;
+            if (name == null || name.isBlank())
+                tool = new UriWrapper(toolPath);
+            else
+                tool = new UriWrapper(toolPath, name);
+
+            modelTools.addUriWrapper(tool);
+            jsonSerializer.saveData();
+            tableTools.setRowSelectionInterval(modelTools.getRowCount() - 1, modelTools.getRowCount() - 1);
+        }
     }
 
     public static void main(String[] args) {
