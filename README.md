@@ -9,6 +9,7 @@ Launch of exile is a launcher for Path of Exile.
 - Custom names
 - Support Steam and standalone version
 - Option to launch PoE without tools/websites
+- Option to skip the launcher
 
 ![Preview Picture](PreviewPicture.png)
 
@@ -31,6 +32,9 @@ It's pretty self Explanatory.
 - Help, my programm wont start
   
   That might be beacause it needs admin rights (.ahk scripts for instance) try to set the launcher to start in admin mode (right click -> properties -> compatibility -> change settings for all users -> start as admin)
+  
+- Can i skip the launcher entirely?
 
+  Yes! Just create a shortcut and add -skiplauncher to the target (right click -> properties)
 ---
 This product isn't affiliated with or endorsed by Grinding Gear Games in any way.
