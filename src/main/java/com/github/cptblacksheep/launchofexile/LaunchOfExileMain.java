@@ -73,8 +73,17 @@ public class LaunchOfExileMain {
             int returnValue = fc.showDialog(null, "Add to tools");
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
+                String name = JOptionPane.showInputDialog(null, "Set name (optional):",
+                        "Launch of Exile - Add tool", JOptionPane.QUESTION_MESSAGE);
+
                 String toolPath = fc.getSelectedFile().getAbsolutePath();
-                UriWrapper tool = new UriWrapper(toolPath);
+
+                UriWrapper tool;
+                if (name == null || name.isBlank())
+                    tool = new UriWrapper(toolPath);
+                else
+                    tool = new UriWrapper(toolPath, name);
+
                 modelTools.addUriWrapper(tool);
                 jsonSerializer.saveData();
                 tableTools.setRowSelectionInterval(modelTools.getRowCount() - 1, modelTools.getRowCount() - 1);
