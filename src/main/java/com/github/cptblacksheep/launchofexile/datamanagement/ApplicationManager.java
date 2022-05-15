@@ -12,12 +12,6 @@ import java.util.Objects;
 public class ApplicationManager {
     private static final String POE_STEAM_ID = "238960";
     private ArrayList<UriWrapper> applications = new ArrayList<>();
-    @JsonIgnore
-    private Settings settings;
-
-    public ApplicationManager(Settings settings) {
-        this.settings = Objects.requireNonNull(settings);
-    }
 
     public static void startApplication(String applicationUri) throws IOException {
         new ProcessBuilder(applicationUri).start();
@@ -56,14 +50,16 @@ public class ApplicationManager {
         try {
             switch (poeVersion) {
                 case STEAM -> startSteamGameById(POE_STEAM_ID);
-                case STANDALONE -> startApplication(settings.getPoeExeLocation());
+                case STANDALONE -> startApplication(Settings.getSettings().getPoeExeLocation());
             }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(
-                    null, "Failed to launch Path of Exile\n\n"
-                            + "It's possible that:\n"
-                            + "- The path has changed (set the new path)\n"
-                            + "- The wrong PoE version is selected",
+                    null, """
+                            Failed to launch Path of Exile
+
+                            It's possible that:
+                            - The path has changed (set the new path)
+                            - The wrong PoE version is selected""",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -89,11 +85,4 @@ public class ApplicationManager {
         applications.remove(application);
     }
 
-    public Settings getSettings() {
-        return settings;
-    }
-
-    public void setSettings(Settings settings) {
-        this.settings = Objects.requireNonNull(settings);
-    }
 }

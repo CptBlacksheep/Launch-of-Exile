@@ -16,10 +16,10 @@ import java.util.Objects;
 
 public class LaunchOfExileMain {
     private static boolean skipLauncherEnabled = false;
+    private final Settings settings;
     private final ApplicationManager applicationManager;
     private final WebsiteManager websiteManager;
     private final JsonSerializer jsonSerializer;
-    private final Settings settings;
     private UriWrapperTableModel modelTools;
     private UriWrapperTableModel modelWebsites;
     private JPanel panelMain;
@@ -49,10 +49,10 @@ public class LaunchOfExileMain {
     private JButton btnRenameWebsite;
 
     private LaunchOfExileMain() {
-        settings = new Settings();
-        applicationManager = new ApplicationManager(settings);
+        settings = Settings.getSettings();
+        applicationManager = new ApplicationManager();
         websiteManager = new WebsiteManager();
-        jsonSerializer = new JsonSerializer(applicationManager, websiteManager, settings);
+        jsonSerializer = new JsonSerializer(applicationManager, websiteManager);
 
         comboBoxVersion.addItem(PoeVersion.STEAM);
         comboBoxVersion.addItem(PoeVersion.STANDALONE);

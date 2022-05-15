@@ -17,17 +17,17 @@ public class JsonSerializer {
     public static final String FOLDER_PATH = System.getProperty("user.home") + "\\AppData\\Local\\Launch of Exile\\";
     public static final String SETTINGS_PATH = FOLDER_PATH + "settings.json";
     public static final String DATA_PATH = FOLDER_PATH + "data.json";
+    @JsonIgnore
+    private final Settings settings;
     @JsonUnwrapped
     private ApplicationManager applicationManager;
     @JsonUnwrapped
     private WebsiteManager websiteManager;
-    @JsonIgnore
-    private Settings settings;
 
-    public JsonSerializer(ApplicationManager applicationManager, WebsiteManager websiteManager, Settings settings) {
+    public JsonSerializer(ApplicationManager applicationManager, WebsiteManager websiteManager) {
         this.applicationManager = Objects.requireNonNull(applicationManager);
         this.websiteManager = Objects.requireNonNull(websiteManager);
-        this.settings = settings;
+        settings = Settings.getSettings();
     }
 
     public void saveData() {
@@ -155,11 +155,4 @@ public class JsonSerializer {
         this.websiteManager = Objects.requireNonNull(websiteManager);
     }
 
-    public Settings getSettings() {
-        return settings;
-    }
-
-    public void setSettings(Settings settings) {
-        this.settings = Objects.requireNonNull(settings);
-    }
 }
