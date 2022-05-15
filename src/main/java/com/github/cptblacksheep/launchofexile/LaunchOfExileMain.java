@@ -66,7 +66,7 @@ public class LaunchOfExileMain {
 
         btnAddTool.addActionListener(e -> {
             JFileChooser fc = new JFileChooser();
-            fc.setDialogTitle("Add tool");
+            fc.setDialogTitle("Launch of Exile - Add tool");
             fc.setAcceptAllFileFilterUsed(false);
             fc.setFileFilter(new FileNameExtensionFilter(".exe, .ahk", "exe", "ahk"));
 
@@ -133,15 +133,7 @@ public class LaunchOfExileMain {
         });
 
         btnAddWebsite.addActionListener(e -> {
-            String websiteUrl = JOptionPane.showInputDialog("Insert URL to add:");
-
-            if (websiteUrl == null || websiteUrl.isBlank())
-                return;
-
-            UriWrapper website = new UriWrapper(websiteUrl);
-            modelWebsites.addUriWrapper(website);
-            jsonSerializer.saveData();
-            tableWebsites.setRowSelectionInterval(modelWebsites.getRowCount() - 1, modelWebsites.getRowCount() - 1);
+            showAddWebsiteDialog();
         });
 
         btnRemoveWebsite.addActionListener(e -> {
@@ -198,7 +190,7 @@ public class LaunchOfExileMain {
 
         btnSetPoeExeLocation.addActionListener(e -> {
             JFileChooser fc = new JFileChooser();
-            fc.setDialogTitle("Poe .exe location");
+            fc.setDialogTitle("Launch of Exile - Set PoE .exe location");
             fc.setAcceptAllFileFilterUsed(false);
             fc.setFileFilter(new FileNameExtensionFilter(".exe", "exe"));
 
@@ -317,7 +309,8 @@ public class LaunchOfExileMain {
     }
 
     private void rename(UriWrapper uriWrapper) {
-        String newName = JOptionPane.showInputDialog("Enter new name:");
+        String newName = JOptionPane.showInputDialog(null, "Enter new name:",
+                "Launch of Exile - Rename", JOptionPane.QUESTION_MESSAGE);
 
         if (newName == null)
             return;
@@ -331,6 +324,36 @@ public class LaunchOfExileMain {
         applicationManager.startAllEnabledApplications();
         applicationManager.startPoe(settings.getSelectedPoeVersion());
         System.exit(0);
+    }
+
+    private void showAddWebsiteDialog() {
+        JTextField tfUrl = new JTextField();
+        JTextField tfName = new JTextField();
+
+        Object[] inputFields = {"URL:", tfUrl, "Name (optional):", tfName};
+
+        int option = JOptionPane.showConfirmDialog(null, inputFields,
+                "Launch of Exile - Add website", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (option != JOptionPane.OK_OPTION)
+            return;
+
+        String url = tfUrl.getText();
+
+        if (url == null || url.isBlank())
+            return;
+
+        String name = tfName.getText();
+
+        UriWrapper website;
+        if (name == null || name.isBlank())
+            website = new UriWrapper(url);
+        else
+            website = new UriWrapper(url, name);
+
+        modelWebsites.addUriWrapper(website);
+        jsonSerializer.saveData();
+        tableWebsites.setRowSelectionInterval(modelWebsites.getRowCount() - 1, modelWebsites.getRowCount() - 1);
     }
 
     public static void main(String[] args) {
