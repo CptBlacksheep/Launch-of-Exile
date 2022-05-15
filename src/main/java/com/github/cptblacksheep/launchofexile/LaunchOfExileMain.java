@@ -15,6 +15,7 @@ import java.awt.event.ItemEvent;
 import java.util.Objects;
 
 public class LaunchOfExileMain {
+    private static boolean skipLauncherEnabled = false;
     private final ApplicationManager applicationManager;
     private final WebsiteManager websiteManager;
     private final JsonSerializer jsonSerializer;
@@ -57,6 +58,9 @@ public class LaunchOfExileMain {
         comboBoxVersion.addItem(PoeVersion.STANDALONE);
 
         loadDataAndSettings();
+
+        if (skipLauncherEnabled)
+            launchOpenAllExit();
 
         createJTablesAndModels();
 
@@ -216,10 +220,7 @@ public class LaunchOfExileMain {
         });
 
         btnLaunch.addActionListener(e -> {
-            websiteManager.openAllEnabledWebsites();
-            applicationManager.startAllEnabledApplications();
-            applicationManager.startPoe(settings.getSelectedPoeVersion());
-            System.exit(0);
+            launchOpenAllExit();
         });
 
         btnLaunchPoeOnly.addActionListener(e -> {
@@ -325,7 +326,17 @@ public class LaunchOfExileMain {
         jsonSerializer.saveData();
     }
 
+    private void launchOpenAllExit() {
+        websiteManager.openAllEnabledWebsites();
+        applicationManager.startAllEnabledApplications();
+        applicationManager.startPoe(settings.getSelectedPoeVersion());
+        System.exit(0);
+    }
+
     public static void main(String[] args) {
+        if (args.length > 0 && "-skiplauncher".equals(args[0]))
+            skipLauncherEnabled = true;
+
         initialize();
     }
 
