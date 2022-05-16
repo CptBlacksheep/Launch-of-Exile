@@ -1,5 +1,6 @@
 package com.github.cptblacksheep.launchofexile;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.github.cptblacksheep.launchofexile.components.UriWrapperTableCellRenderer;
 import com.github.cptblacksheep.launchofexile.components.UriWrapperTableModel;
@@ -16,10 +17,11 @@ import java.util.Objects;
 
 public class LaunchOfExileMain {
     private static boolean skipLauncherEnabled = false;
-    private final Settings settings;
-    private final ApplicationManager applicationManager;
-    private final WebsiteManager websiteManager;
-    private final JsonSerializer jsonSerializer;
+    private static boolean darkModeEnabled = false;
+    private static Settings settings;
+    private static ApplicationManager applicationManager;
+    private static WebsiteManager websiteManager;
+    private static JsonSerializer jsonSerializer;
     private UriWrapperTableModel modelTools;
     private UriWrapperTableModel modelWebsites;
     private JPanel panelMain;
@@ -49,18 +51,10 @@ public class LaunchOfExileMain {
     private JButton btnRenameWebsite;
 
     private LaunchOfExileMain() {
-        settings = Settings.getSettings();
-        applicationManager = new ApplicationManager();
-        websiteManager = new WebsiteManager();
-        jsonSerializer = new JsonSerializer(applicationManager, websiteManager);
-
-        comboBoxVersion.addItem(PoeVersion.STEAM);
-        comboBoxVersion.addItem(PoeVersion.STANDALONE);
-
-        loadDataAndSettings();
-
-        if (skipLauncherEnabled)
-            launchOpenAllExit();
+        addItemsToComboBoxVersion();
+        tfPoeExeLocation.setText(settings.getPoeExeLocation());
+        comboBoxVersion.setSelectedItem(settings.getSelectedPoeVersion());
+        setComponentVisibilityBasedOnComboBoxVersion();
 
         createJTablesAndModels();
 
@@ -175,6 +169,8 @@ public class LaunchOfExileMain {
 
         comboBoxVersion.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
+                PoeVersion selection = (PoeVersion) comboBoxVersion.getSelectedItem();
+                settings.setSelectedPoeVersion(selection);
                 setComponentVisibilityBasedOnComboBoxVersion();
                 jsonSerializer.saveSettings();
             }
@@ -204,7 +200,18 @@ public class LaunchOfExileMain {
     }
 
     public static void initialize() {
-        FlatLightLaf.setup();
+        settings = Settings.getSettings();
+        applicationManager = new ApplicationManager();
+        websiteManager = new WebsiteManager();
+        jsonSerializer = new JsonSerializer(applicationManager, websiteManager);
+
+        jsonSerializer.loadDataAndSettings();
+
+        if (skipLauncherEnabled)
+            launchOpenAllExit();
+
+        if (darkModeEnabled) FlatDarkLaf.setup();
+        else FlatLightLaf.setup();
 
         JFrame frame = new JFrame("Launch of Exile");
         frame.setContentPane(new LaunchOfExileMain().panelMain);
@@ -219,11 +226,11 @@ public class LaunchOfExileMain {
 
     }
 
-    private void loadDataAndSettings() {
-        jsonSerializer.loadDataAndSettings();
-        tfPoeExeLocation.setText(settings.getPoeExeLocation());
-        comboBoxVersion.setSelectedItem(settings.getSelectedPoeVersion());
-        setComponentVisibilityBasedOnComboBoxVersion();
+    private static void launchOpenAllExit() {
+        websiteManager.openAllEnabledWebsites();
+        applicationManager.startAllEnabledApplications();
+        applicationManager.startPoe(settings.getSelectedPoeVersion());
+        System.exit(0);
     }
 
     private void setComponentVisibilityBasedOnComboBoxVersion() {
@@ -233,12 +240,10 @@ public class LaunchOfExileMain {
             lblPoeExeLocation.setVisible(false);
             tfPoeExeLocation.setVisible(false);
             btnSetPoeExeLocation.setVisible(false);
-            settings.setSelectedPoeVersion(PoeVersion.STEAM);
         } else if (Objects.equals(selection, PoeVersion.STANDALONE)) {
             lblPoeExeLocation.setVisible(true);
             tfPoeExeLocation.setVisible(true);
             btnSetPoeExeLocation.setVisible(true);
-            settings.setSelectedPoeVersion(PoeVersion.STANDALONE);
         }
     }
 
@@ -284,13 +289,6 @@ public class LaunchOfExileMain {
 
         uriWrapper.setName(newName);
         jsonSerializer.saveData();
-    }
-
-    private void launchOpenAllExit() {
-        websiteManager.openAllEnabledWebsites();
-        applicationManager.startAllEnabledApplications();
-        applicationManager.startPoe(settings.getSelectedPoeVersion());
-        System.exit(0);
     }
 
     private void showSetPoeLocationDialog() {
@@ -363,6 +361,11 @@ public class LaunchOfExileMain {
             jsonSerializer.saveData();
             tableTools.setRowSelectionInterval(modelTools.getRowCount() - 1, modelTools.getRowCount() - 1);
         }
+    }
+
+    private void addItemsToComboBoxVersion() {
+        comboBoxVersion.addItem(PoeVersion.STEAM);
+        comboBoxVersion.addItem(PoeVersion.STANDALONE);
     }
 
     public static void main(String[] args) {
