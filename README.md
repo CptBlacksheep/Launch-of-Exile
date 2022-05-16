@@ -10,6 +10,7 @@ Launch of exile is a launcher for Path of Exile.
 - Support Steam and standalone version
 - Option to launch PoE without tools/websites
 - Option to skip the launcher
+- Optional dark mode
 
 ![Preview Picture](PreviewPicture.png)
 
