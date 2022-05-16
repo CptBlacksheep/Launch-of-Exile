@@ -115,12 +115,22 @@ public class JsonSerializer {
             JsonNode jsonNode = mapper.readTree(file);
 
             JsonNode part = jsonNode.get("poeExeLocation");
-            String poeExeLocation = part.textValue();
-            settings.setPoeExeLocation(poeExeLocation);
+            if (part != null) {
+                String poeExeLocation = part.textValue();
+                settings.setPoeExeLocation(poeExeLocation);
+            }
 
             part = jsonNode.get("selectedPoeVersion");
-            PoeVersion poeVersion = mapper.convertValue(part.textValue(), PoeVersion.class);
-            settings.setSelectedPoeVersion(poeVersion);
+            if (part != null) {
+                PoeVersion poeVersion = mapper.convertValue(part.textValue(), PoeVersion.class);
+                settings.setSelectedPoeVersion(poeVersion);
+            }
+
+            part = jsonNode.get("darkModeEnabled");
+            if (part != null) {
+                boolean darkModeEnabled = part.asBoolean(false);
+                settings.setDarkModeEnabled(darkModeEnabled);
+            }
 
         } catch (IOException | RuntimeException ex) {
             JOptionPane.showMessageDialog(null, "Failed to load settings",

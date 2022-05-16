@@ -6,10 +6,14 @@ import java.util.Objects;
 
 public class Settings {
     private static Settings INSTANCE;
-    private String poeExeLocation = "";
-    private PoeVersion selectedPoeVersion = PoeVersion.STEAM;
+    private String poeExeLocation;
+    private PoeVersion selectedPoeVersion;
+    private boolean darkModeEnabled;
 
     private Settings() {
+        poeExeLocation = "";
+        selectedPoeVersion = PoeVersion.STEAM;
+        darkModeEnabled = false;
     }
 
     @JsonCreator
@@ -34,5 +38,13 @@ public class Settings {
 
     public void setSelectedPoeVersion(PoeVersion selectedPoeVersion) {
         this.selectedPoeVersion = Objects.requireNonNull(selectedPoeVersion);
+    }
+
+    public boolean isDarkModeEnabled() {
+        return darkModeEnabled;
+    }
+
+    public void setDarkModeEnabled(boolean darkModeEnabled) {
+        this.darkModeEnabled = darkModeEnabled;
     }
 }

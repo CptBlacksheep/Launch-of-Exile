@@ -17,7 +17,6 @@ import java.util.Objects;
 
 public class LaunchOfExileMain {
     private static boolean skipLauncherEnabled = false;
-    private static boolean darkModeEnabled = false;
     private static Settings settings;
     private static ApplicationManager applicationManager;
     private static WebsiteManager websiteManager;
@@ -210,7 +209,7 @@ public class LaunchOfExileMain {
         if (skipLauncherEnabled)
             launchOpenAllExit();
 
-        if (darkModeEnabled) FlatDarkLaf.setup();
+        if (settings.isDarkModeEnabled()) FlatDarkLaf.setup();
         else FlatLightLaf.setup();
 
         JFrame frame = new JFrame("Launch of Exile");
