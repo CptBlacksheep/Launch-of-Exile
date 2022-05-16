@@ -48,12 +48,15 @@ public class LaunchOfExileMain {
     private JButton btnEnableDisableWebsite;
     private JButton btnRenameTool;
     private JButton btnRenameWebsite;
+    private JCheckBox checkBoxEnableDarkMode;
 
     private LaunchOfExileMain() {
         addItemsToComboBoxVersion();
         tfPoeExeLocation.setText(settings.getPoeExeLocation());
         comboBoxVersion.setSelectedItem(settings.getSelectedPoeVersion());
         setComponentVisibilityBasedOnComboBoxVersion();
+
+        checkBoxEnableDarkMode.setSelected(settings.isDarkModeEnabled());
 
         createJTablesAndModels();
 
@@ -196,6 +199,10 @@ public class LaunchOfExileMain {
             }
         });
 
+        checkBoxEnableDarkMode.addActionListener(e -> {
+            settings.setDarkModeEnabled(checkBoxEnableDarkMode.isSelected());
+            jsonSerializer.saveSettings();
+        });
     }
 
     public static void initialize() {
