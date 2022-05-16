@@ -347,7 +347,7 @@ public class LaunchOfExileMain {
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Launch of Exile - Add tool");
         fc.setAcceptAllFileFilterUsed(false);
-        fc.setFileFilter(new FileNameExtensionFilter(".exe, .ahk", "exe", "ahk"));
+        fc.setFileFilter(new FileNameExtensionFilter(".exe, .jar, .ahk", "exe", "jar", "ahk"));
 
         int returnValue = fc.showDialog(null, "Add to tools");
 
