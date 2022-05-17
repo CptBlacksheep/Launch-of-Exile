@@ -1,6 +1,6 @@
 package com.github.cptblacksheep.launchofexile.datamanagement;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.cptblacksheep.launchofexile.exceptions.AhkSupportException;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -21,6 +21,20 @@ public class ApplicationManager {
         startApplication(application.getUri());
     }
 
+    public static void startAhkApplication(UriWrapper application) throws IOException {
+        Settings settings = Settings.getSettings();
+        String ahkExeLocation = settings.getAhkExeLocation();
+        boolean ahkSupportEnabled = settings.isAhkSupportEnabled();
+
+        if (!ahkSupportEnabled)
+            throw new AhkSupportException("AHK support is not enabled");
+
+        if (ahkExeLocation.isBlank())
+            throw new AhkSupportException("AHK .exe location is not set");
+
+        new ProcessBuilder(ahkExeLocation, application.getUri()).start();
+    }
+
     public static void startSteamGameById(String id) throws IOException {
         try {
             WebsiteManager.openWebsite("steam://run/" + id); //Uses Steam browser protocol
@@ -32,8 +46,13 @@ public class ApplicationManager {
     public void startAllEnabledApplications() {
         applications.stream().filter(UriWrapper::isEnabled).forEach(application -> {
             try {
-                startApplication(application);
-            } catch (IOException e) {
+
+                if (application.getUri().toLowerCase().endsWith(".ahk"))
+                    startAhkApplication(application);
+                else
+                    startApplication(application);
+
+            } catch (IOException ex) {
                 JOptionPane.showMessageDialog(
                         null, String.format("Failed to launch application: %s%n%n"
                                 + "It's possible that:%n"
@@ -41,6 +60,11 @@ public class ApplicationManager {
                                 + "- The application needs admin rights (set the launcher to start in admin mode, "
                                 + "visit the FAQ at https://github.com/CptBlacksheep/Launch-of-Exile for "
                                 + "more information)", application.getUri()),
+                        "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
+            } catch (AhkSupportException ex) {
+                JOptionPane.showMessageDialog(
+                        null, String.format("Failed to launch application: %s%n%n"
+                                + "- .ahk support is not enabled or AHK .exe location is not set", application.getUri()),
                         "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             }
         });

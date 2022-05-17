@@ -132,6 +132,18 @@ public class JsonSerializer {
                 settings.setDarkModeEnabled(darkModeEnabled);
             }
 
+            part = jsonNode.get("ahkSupportEnabled");
+            if (part != null) {
+                boolean ahkSupportEnabled = part.asBoolean(false);
+                settings.setAhkSupportEnabled(ahkSupportEnabled);
+            }
+
+            part = jsonNode.get("ahkExeLocation");
+            if (part != null) {
+                String ahkExeLocation = part.textValue();
+                settings.setAhkExeLocation(ahkExeLocation);
+            }
+
         } catch (IOException | RuntimeException ex) {
             JOptionPane.showMessageDialog(null, "Failed to load settings",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);

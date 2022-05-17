@@ -6,14 +6,18 @@ import java.util.Objects;
 
 public class Settings {
     private static Settings INSTANCE;
-    private String poeExeLocation;
     private PoeVersion selectedPoeVersion;
+    private String poeExeLocation;
     private boolean darkModeEnabled;
+    private boolean ahkSupportEnabled;
+    private String ahkExeLocation;
 
     private Settings() {
         poeExeLocation = "";
+        ahkExeLocation = "";
         selectedPoeVersion = PoeVersion.STEAM;
         darkModeEnabled = false;
+        ahkSupportEnabled = false;
     }
 
     @JsonCreator
@@ -46,5 +50,21 @@ public class Settings {
 
     public void setDarkModeEnabled(boolean darkModeEnabled) {
         this.darkModeEnabled = darkModeEnabled;
+    }
+
+    public String getAhkExeLocation() {
+        return ahkExeLocation;
+    }
+
+    public void setAhkExeLocation(String ahkExeLocation) {
+        this.ahkExeLocation = Objects.requireNonNull(ahkExeLocation);
+    }
+
+    public boolean isAhkSupportEnabled() {
+        return ahkSupportEnabled;
+    }
+
+    public void setAhkSupportEnabled(boolean ahkSupportEnabled) {
+        this.ahkSupportEnabled = ahkSupportEnabled;
     }
 }

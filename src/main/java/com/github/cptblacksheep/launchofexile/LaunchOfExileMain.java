@@ -49,12 +49,23 @@ public class LaunchOfExileMain {
     private JButton btnRenameTool;
     private JButton btnRenameWebsite;
     private JCheckBox checkBoxEnableDarkMode;
+    private JCheckBox checkBoxEnableAhkSupport;
+    private JTextField tfAhkExeLocation;
+    private JButton btnSetAhkExeLocation;
+    private JPanel panelAhkExeLocation;
+    private JLabel lblAhkExeLocation;
+    private JPanel panelLaunchButtons;
 
     private LaunchOfExileMain() {
         addItemsToComboBoxVersion();
         tfPoeExeLocation.setText(settings.getPoeExeLocation());
+        tfAhkExeLocation.setText(settings.getAhkExeLocation());
+
         comboBoxVersion.setSelectedItem(settings.getSelectedPoeVersion());
-        setComponentVisibilityBasedOnComboBoxVersion();
+        setPoeExeComponentVisibilityByPoeVersion(settings.getSelectedPoeVersion());
+
+        checkBoxEnableAhkSupport.setSelected(settings.isAhkSupportEnabled());
+        setAHKComponentVisibility(settings.isAhkSupportEnabled());
 
         checkBoxEnableDarkMode.setSelected(settings.isDarkModeEnabled());
 
@@ -167,13 +178,13 @@ public class LaunchOfExileMain {
             tableWebsites.setRowSelectionInterval(selectedRow, selectedRow);
         });
 
-        btnSetPoeExeLocation.addActionListener(e -> showSetPoeLocationDialog());
+        btnSetPoeExeLocation.addActionListener(e -> showSetPoeExeLocationDialog());
 
         comboBoxVersion.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 PoeVersion selection = (PoeVersion) comboBoxVersion.getSelectedItem();
                 settings.setSelectedPoeVersion(selection);
-                setComponentVisibilityBasedOnComboBoxVersion();
+                setPoeExeComponentVisibilityByPoeVersion(selection);
                 jsonSerializer.saveSettings();
             }
         });
@@ -203,6 +214,15 @@ public class LaunchOfExileMain {
             settings.setDarkModeEnabled(checkBoxEnableDarkMode.isSelected());
             jsonSerializer.saveSettings();
         });
+
+        checkBoxEnableAhkSupport.addActionListener(e -> {
+            boolean ahkSupportSelected = checkBoxEnableAhkSupport.isSelected();
+            settings.setAhkSupportEnabled(ahkSupportSelected);
+            setAHKComponentVisibility(ahkSupportSelected);
+            jsonSerializer.saveSettings();
+        });
+
+        btnSetAhkExeLocation.addActionListener(e -> showSetAhkExeLocationDialog());
     }
 
     public static void initialize() {
@@ -224,7 +244,7 @@ public class LaunchOfExileMain {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setResizable(false);
-        frame.setSize(new Dimension(700, 500));
+        frame.setSize(new Dimension(750, 550));
         frame.setLocationRelativeTo(null);
         frame.setIconImage(Toolkit.getDefaultToolkit().getImage(
                 LaunchOfExileMain.class.getClassLoader().getResource("Launch_of_Exile.png")));
@@ -239,18 +259,23 @@ public class LaunchOfExileMain {
         System.exit(0);
     }
 
-    private void setComponentVisibilityBasedOnComboBoxVersion() {
-        PoeVersion selection = (PoeVersion) comboBoxVersion.getSelectedItem();
-
-        if (Objects.equals(selection, PoeVersion.STEAM)) {
-            lblPoeExeLocation.setVisible(false);
-            tfPoeExeLocation.setVisible(false);
-            btnSetPoeExeLocation.setVisible(false);
-        } else if (Objects.equals(selection, PoeVersion.STANDALONE)) {
-            lblPoeExeLocation.setVisible(true);
-            tfPoeExeLocation.setVisible(true);
-            btnSetPoeExeLocation.setVisible(true);
+    private void setPoeExeComponentVisibilityByPoeVersion(PoeVersion poeVersion) {
+        switch (Objects.requireNonNull(poeVersion)) {
+            case STEAM -> setPoeExeComponentVisibility(false);
+            case STANDALONE -> setPoeExeComponentVisibility(true);
         }
+    }
+
+    private void setPoeExeComponentVisibility(boolean visible) {
+        lblPoeExeLocation.setVisible(visible);
+        tfPoeExeLocation.setVisible(visible);
+        btnSetPoeExeLocation.setVisible(visible);
+    }
+
+    private void setAHKComponentVisibility(boolean visible) {
+        lblAhkExeLocation.setVisible(visible);
+        tfAhkExeLocation.setVisible(visible);
+        btnSetAhkExeLocation.setVisible(visible);
     }
 
     private void createJTablesAndModels() {
@@ -297,7 +322,7 @@ public class LaunchOfExileMain {
         jsonSerializer.saveData();
     }
 
-    private void showSetPoeLocationDialog() {
+    private void showSetPoeExeLocationDialog() {
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Launch of Exile - Set PoE .exe location");
         fc.setAcceptAllFileFilterUsed(false);
@@ -309,6 +334,22 @@ public class LaunchOfExileMain {
             String exeLocation = fc.getSelectedFile().getAbsolutePath();
             tfPoeExeLocation.setText(exeLocation);
             settings.setPoeExeLocation(exeLocation);
+            jsonSerializer.saveSettings();
+        }
+    }
+
+    private void showSetAhkExeLocationDialog() {
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Launch of Exile - Set AHK .exe location");
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.setFileFilter(new FileNameExtensionFilter(".exe", "exe"));
+
+        int returnValue = fc.showDialog(null, "Set location");
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            String exeLocation = fc.getSelectedFile().getAbsolutePath();
+            tfAhkExeLocation.setText(exeLocation);
+            settings.setAhkExeLocation(exeLocation);
             jsonSerializer.saveSettings();
         }
     }
@@ -347,7 +388,11 @@ public class LaunchOfExileMain {
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Launch of Exile - Add tool");
         fc.setAcceptAllFileFilterUsed(false);
-        fc.setFileFilter(new FileNameExtensionFilter(".exe, .jar, .ahk", "exe", "jar", "ahk"));
+
+        if (settings.isAhkSupportEnabled())
+            fc.setFileFilter(new FileNameExtensionFilter(".exe, .jar, .ahk", "exe", "jar", "ahk"));
+        else
+            fc.setFileFilter(new FileNameExtensionFilter(".exe, .jar", "exe", "jar"));
 
         int returnValue = fc.showDialog(null, "Add to tools");
 
