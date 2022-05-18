@@ -25,7 +25,7 @@ Simply download the installer from the latest release, install it, done.
 
 It's pretty self Explanatory.
 1. Choose your PoE version.
-2. Add the tools and website you want to use.
+2. Add the tools and websites you want to use.
 3. launch.
 
 ### FAQ
