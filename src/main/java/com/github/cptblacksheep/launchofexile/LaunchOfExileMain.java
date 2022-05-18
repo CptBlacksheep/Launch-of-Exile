@@ -102,6 +102,18 @@ public class LaunchOfExileMain {
             if (tool == null)
                 return;
 
+            boolean isAhkFile = tool.getUri().toLowerCase().endsWith(".ahk");
+
+            if (isAhkFile && !tool.isEnabled() && !checkBoxEnableAhkSupport.isSelected()) {
+                JOptionPane.showMessageDialog(
+                        null, """
+                                Failed to enable .ahk tool.
+
+                                Set "Enable .ahk support" checkbox true to resolve.""",
+                        "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             tool.setEnabled(!tool.isEnabled());
             tableTools.repaint();
             jsonSerializer.saveData();
