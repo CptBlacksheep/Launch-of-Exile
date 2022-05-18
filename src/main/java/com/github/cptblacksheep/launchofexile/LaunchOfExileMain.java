@@ -104,7 +104,7 @@ public class LaunchOfExileMain {
 
             boolean isAhkFile = tool.getUri().toLowerCase().endsWith(".ahk");
 
-            if (isAhkFile && !tool.isEnabled() && !checkBoxEnableAhkSupport.isSelected()) {
+            if (isAhkFile && !checkBoxEnableAhkSupport.isSelected()) {
                 JOptionPane.showMessageDialog(
                         null, """
                                 Failed to enable .ahk tool.
