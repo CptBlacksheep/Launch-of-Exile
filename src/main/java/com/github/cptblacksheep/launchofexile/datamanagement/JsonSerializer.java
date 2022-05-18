@@ -38,7 +38,7 @@ public class JsonSerializer {
             prettyWriter.writeValue(Path.of(DATA_PATH).toFile(), this);
         } catch (IOException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to save data",
+            JOptionPane.showMessageDialog(null, "Failed to save data.",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         }
 
@@ -79,7 +79,7 @@ public class JsonSerializer {
             });
 
         } catch (IOException | RuntimeException ex) {
-            JOptionPane.showMessageDialog(null, "Failed to load data",
+            JOptionPane.showMessageDialog(null, "Failed to load data.",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         }
 
@@ -95,7 +95,7 @@ public class JsonSerializer {
             prettyWriter.writeValue(Path.of(SETTINGS_PATH).toFile(), settings);
         } catch (IOException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Failed to save settings",
+            JOptionPane.showMessageDialog(null, "Failed to save settings.",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -145,7 +145,7 @@ public class JsonSerializer {
             }
 
         } catch (IOException | RuntimeException ex) {
-            JOptionPane.showMessageDialog(null, "Failed to load settings",
+            JOptionPane.showMessageDialog(null, "Failed to load settings.",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         }
 

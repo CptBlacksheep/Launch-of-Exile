@@ -1,10 +1,13 @@
 package com.github.cptblacksheep.launchofexile.datamanagement;
 
-import com.github.cptblacksheep.launchofexile.exceptions.AhkSupportException;
+import com.github.cptblacksheep.launchofexile.exceptions.ExeNotFoundException;
 
 import javax.swing.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Objects;
@@ -14,6 +17,10 @@ public class ApplicationManager {
     private ArrayList<UriWrapper> applications = new ArrayList<>();
 
     public static void startApplication(String applicationUri) throws IOException {
+
+        if (Files.notExists(Path.of(applicationUri)))
+            throw new FileNotFoundException("Application not found");
+
         new ProcessBuilder(applicationUri).start();
     }
 
@@ -24,22 +31,22 @@ public class ApplicationManager {
     public static void startAhkApplication(UriWrapper application) throws IOException {
         Settings settings = Settings.getSettings();
         String ahkExeLocation = settings.getAhkExeLocation();
-        boolean ahkSupportEnabled = settings.isAhkSupportEnabled();
+        String applicationUri = application.getUri();
 
-        if (!ahkSupportEnabled)
-            throw new AhkSupportException("AHK support is not enabled");
+        if (ahkExeLocation.isBlank() || Files.notExists(Path.of(ahkExeLocation)))
+            throw new ExeNotFoundException("AHK .exe not found");
 
-        if (ahkExeLocation.isBlank())
-            throw new AhkSupportException("AHK .exe location is not set");
+        if (Files.notExists(Path.of(applicationUri)))
+            throw new FileNotFoundException("Application not found");
 
-        new ProcessBuilder(ahkExeLocation, application.getUri()).start();
+        new ProcessBuilder(ahkExeLocation, applicationUri).start();
     }
 
     public static void startSteamGameById(String id) throws IOException {
         try {
             WebsiteManager.openWebsite("steam://run/" + id); //Uses Steam browser protocol
         } catch (URISyntaxException ex) {
-            throw new IOException(ex);
+            throw new IOException(ex); //Won't happen
         }
     }
 
@@ -52,19 +59,22 @@ public class ApplicationManager {
                 else
                     startApplication(application);
 
+            } catch (ExeNotFoundException ex) {
+                JOptionPane.showMessageDialog(
+                        null, String.format("Failed to launch application: %s%n%n"
+                                + "AHK .exe not found.", application.getUri()),
+                        "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(
+                        null, String.format("Failed to launch application: %s%n%n"
+                                + "Application not found.", application.getUri()),
+                        "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(
                         null, String.format("Failed to launch application: %s%n%n"
-                                + "It's possible that:%n"
-                                + "- The path has changed (remove the tool and re add it)%n"
-                                + "- The application needs admin rights (set the launcher to start in admin mode, "
-                                + "visit the FAQ at https://github.com/CptBlacksheep/Launch-of-Exile for "
-                                + "more information)", application.getUri()),
-                        "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
-            } catch (AhkSupportException ex) {
-                JOptionPane.showMessageDialog(
-                        null, String.format("Failed to launch application: %s%n%n"
-                                + "- .ahk support is not enabled or AHK .exe location is not set", application.getUri()),
+                                + "It's possible that the application needs admin rights (set the launcher to start "
+                                + "in admin mode, visit the FAQ at https://github.com/CptBlacksheep/Launch-of-Exile "
+                                + "for more information).", application.getUri()),
                         "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             }
         });
@@ -76,14 +86,19 @@ public class ApplicationManager {
                 case STEAM -> startSteamGameById(POE_STEAM_ID);
                 case STANDALONE -> startApplication(Settings.getSettings().getPoeExeLocation());
             }
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(
+                    null, """
+                            Failed to launch Path of Exile
+
+                            PoE .exe not found.""",
+                    "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(
                     null, """
                             Failed to launch Path of Exile
 
-                            It's possible that:
-                            - The path has changed (set the new path)
-                            - The wrong PoE version is selected""",
+                            It's possible that the wrong PoE version is selected.""",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         }
     }
