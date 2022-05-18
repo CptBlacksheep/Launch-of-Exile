@@ -109,8 +109,10 @@ public class LaunchOfExileMain {
                         null, """
                                 Failed to enable .ahk tool.
 
-                                Set "Enable .ahk support" checkbox true to resolve.""",
-                        "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
+                                Set "Enable .ahk support" checkbox to resolve.""",
+                        "Launch of Exile - Error", JOptionPane.WARNING_MESSAGE);
+                tableTools.repaint();
+                tableTools.setRowSelectionInterval(selectedRow, selectedRow);
                 return;
             }
 
@@ -238,6 +240,8 @@ public class LaunchOfExileMain {
                     if (application.getUri().toLowerCase().endsWith(".ahk"))
                         application.setEnabled(false);
                 });
+                tableTools.repaint();
+                jsonSerializer.saveData();
             }
 
             jsonSerializer.saveSettings();
