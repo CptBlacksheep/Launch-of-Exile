@@ -26,7 +26,7 @@ Simply download the installer from the latest release, install it, done.
 It's pretty self Explanatory.
 1. Choose your PoE version.
 2. Add the tools and websites you want to use.
-3. launch.
+3. Launch.
 
 ### FAQ
 
@@ -40,6 +40,6 @@ It's pretty self Explanatory.
 
 - The File extension of my tool is not supported.
 
-  In that case please tell me about it, I will try to find a solution.
+  Please tell me about it, I will try to find a solution.
 ---
 This product isn't affiliated with or endorsed by Grinding Gear Games in any way.
