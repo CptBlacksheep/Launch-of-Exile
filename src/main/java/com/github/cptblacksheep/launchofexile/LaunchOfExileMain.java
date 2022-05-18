@@ -217,8 +217,17 @@ public class LaunchOfExileMain {
 
         checkBoxEnableAhkSupport.addActionListener(e -> {
             boolean ahkSupportSelected = checkBoxEnableAhkSupport.isSelected();
+
             settings.setAhkSupportEnabled(ahkSupportSelected);
             setAHKComponentVisibility(ahkSupportSelected);
+
+            if (!ahkSupportSelected) {
+                applicationManager.getApplications().forEach(application -> {
+                    if (application.getUri().toLowerCase().endsWith(".ahk"))
+                        application.setEnabled(false);
+                });
+            }
+
             jsonSerializer.saveSettings();
         });
 
