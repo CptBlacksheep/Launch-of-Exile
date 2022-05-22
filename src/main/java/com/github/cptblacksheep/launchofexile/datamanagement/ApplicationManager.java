@@ -3,6 +3,7 @@ package com.github.cptblacksheep.launchofexile.datamanagement;
 import com.github.cptblacksheep.launchofexile.exceptions.ExeNotFoundException;
 
 import javax.swing.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -21,7 +22,8 @@ public class ApplicationManager {
         if (Files.notExists(Path.of(applicationUri)))
             throw new FileNotFoundException("Application not found");
 
-        new ProcessBuilder(applicationUri).start();
+        File workingDir = new File(applicationUri).getParentFile();
+        new ProcessBuilder(applicationUri).directory(workingDir).start();
     }
 
     public static void startApplication(UriWrapper application) throws IOException {
@@ -39,7 +41,8 @@ public class ApplicationManager {
         if (Files.notExists(Path.of(applicationUri)))
             throw new FileNotFoundException("Application not found");
 
-        new ProcessBuilder(ahkExeLocation, applicationUri).start();
+        File workingDir = new File(applicationUri).getParentFile();
+        new ProcessBuilder(ahkExeLocation, applicationUri).directory(workingDir).start();
     }
 
     public static void startSteamGameById(String id) throws IOException {
