@@ -42,8 +42,6 @@ public class LaunchOfExileMain {
     private JButton btnSetPoeExeLocation;
     private JSeparator separatorLaunch;
     private JButton btnLaunchPoeOnly;
-    private JPanel panelVersion;
-    private JPanel panelPoeExeLocation;
     private JButton btnEnableDisableTool;
     private JButton btnEnableDisableWebsite;
     private JButton btnRenameTool;
@@ -52,9 +50,13 @@ public class LaunchOfExileMain {
     private JCheckBox checkBoxEnableAhkSupport;
     private JTextField tfAhkExeLocation;
     private JButton btnSetAhkExeLocation;
-    private JPanel panelAhkExeLocation;
     private JLabel lblAhkExeLocation;
     private JPanel panelLaunchButtons;
+    private JPanel panelSettings;
+    private JTabbedPane tabbedPane;
+    private JPanel panelPoeVersion;
+    private JPanel panelPoeExeLocation;
+    private JPanel panelAhkExeLocation;
 
     private LaunchOfExileMain() {
         addItemsToComboBoxVersion();
@@ -265,7 +267,7 @@ public class LaunchOfExileMain {
         else FlatLightLaf.setup();
 
         JFrame frame = new JFrame("Launch of Exile");
-        frame.setContentPane(new LaunchOfExileMain().panelMain);
+        frame.setContentPane(new LaunchOfExileMain().tabbedPane);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setResizable(false);
