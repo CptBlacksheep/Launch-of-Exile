@@ -266,7 +266,7 @@ public class LaunchOfExileMain {
             if (newVersionAvailable)
                 UpdateChecker.showNewVersionDialog(false);
             else
-                JOptionPane.showMessageDialog(null, "LoE is already up to date.",
+                JOptionPane.showMessageDialog(null, "LoE is up to date.",
                         "Launch of Exile - Update", JOptionPane.INFORMATION_MESSAGE);
         });
     }
