@@ -61,8 +61,6 @@ public class LaunchOfExileMain {
     private JCheckBox checkBoxShowUpdateNotifications;
 
     private LaunchOfExileMain() {
-        UpdateChecker.checkForNewVersion();
-
         addItemsToComboBoxVersion();
         tfPoeExeLocation.setText(settings.getPoeExeLocation());
         tfAhkExeLocation.setText(settings.getAhkExeLocation());
@@ -272,11 +270,14 @@ public class LaunchOfExileMain {
 
         jsonSerializer.loadDataAndSettings();
 
-        if (skipLauncherEnabled)
-            launchOpenAllExit();
-
         if (settings.isDarkModeEnabled()) FlatDarkLaf.setup();
         else FlatLightLaf.setup();
+
+        UpdateChecker.checkForNewVersion();
+
+        if (skipLauncherEnabled) {
+            launchOpenAllExit();
+        }
 
         JFrame frame = new JFrame("Launch of Exile");
         frame.setContentPane(new LaunchOfExileMain().tabbedPane);
