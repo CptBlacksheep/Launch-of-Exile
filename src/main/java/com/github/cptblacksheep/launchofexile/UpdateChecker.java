@@ -19,17 +19,44 @@ public class UpdateChecker {
     private UpdateChecker() {
     }
 
-    public static void checkForNewVersion() {
+    public static void startupCheckForNewVersion() {
         boolean updateNotificationsEnabled = Settings.getSettings().isUpdateNotificationsEnabled();
 
         if (!updateNotificationsEnabled)
             return;
 
-        String latestVersionTag = latestVersionTag();
-        boolean newVersionAvailable = newVersionAvailable(latestVersionTag);
+        boolean newVersionAvailable = checkForNewVersion();
 
         if (newVersionAvailable)
-            showNewVersionDialog();
+            showNewVersionDialog(true);
+    }
+
+    public static boolean checkForNewVersion() {
+        String latestVersionTag = latestVersionTag();
+        return newVersionAvailable(latestVersionTag);
+    }
+
+    public static void showNewVersionDialog(boolean exitAfterGoToReleasePage) {
+        Object[] choices = {"Go to the release page", "Close dialog"};
+        int option = JOptionPane.showOptionDialog(null,
+                "A new LoE version is available.",
+                "Launch of Exile - Update",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                choices, null);
+
+        if (option != JOptionPane.OK_OPTION)
+            return;
+
+        try {
+            WebsiteManager.openWebsite("https://github.com/CptBlacksheep/Launch-of-Exile/releases/latest");
+        } catch (URISyntaxException | IOException e) {
+            //Ignore
+        }
+
+        if (exitAfterGoToReleasePage)
+            System.exit(0);
     }
 
     private static String latestVersionTag() {
@@ -54,27 +81,5 @@ public class UpdateChecker {
             return false;
 
         return !latestVersionTag.equals("v" + VERSION);
-    }
-
-    private static void showNewVersionDialog() {
-        Object[] choices = {"Go to the release page", "Skip"};
-        int option = JOptionPane.showOptionDialog(null,
-                "A new LoE version is available.",
-                "Launch of Exile - Update",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                choices, null);
-
-        if (option != JOptionPane.OK_OPTION)
-            return;
-
-        try {
-            WebsiteManager.openWebsite("https://github.com/CptBlacksheep/Launch-of-Exile/releases/latest");
-        } catch (URISyntaxException | IOException e) {
-            //Ignore
-        }
-
-        System.exit(0);
     }
 }

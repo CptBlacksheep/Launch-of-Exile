@@ -10,9 +10,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.ItemEvent;
+import java.awt.event.*;
 import java.util.Objects;
 
 public class LaunchOfExileMain {
@@ -59,6 +57,7 @@ public class LaunchOfExileMain {
     private JPanel panelAhkExeLocation;
     private JLabel lblLoEVersion;
     private JCheckBox checkBoxShowUpdateNotifications;
+    private JButton btnCheckForUpdates;
 
     private LaunchOfExileMain() {
         addItemsToComboBoxVersion();
@@ -260,6 +259,16 @@ public class LaunchOfExileMain {
             settings.setUpdateNotificationsEnabled(checkBoxShowUpdateNotifications.isSelected());
             jsonSerializer.saveSettings();
         });
+
+        btnCheckForUpdates.addActionListener(e -> {
+            boolean newVersionAvailable = UpdateChecker.checkForNewVersion();
+
+            if (newVersionAvailable)
+                UpdateChecker.showNewVersionDialog(false);
+            else
+                JOptionPane.showMessageDialog(null, "LoE is already up to date.",
+                        "Launch of Exile - Update", JOptionPane.INFORMATION_MESSAGE);
+        });
     }
 
     public static void initialize() {
@@ -273,7 +282,7 @@ public class LaunchOfExileMain {
         if (settings.isDarkModeEnabled()) FlatDarkLaf.setup();
         else FlatLightLaf.setup();
 
-        UpdateChecker.checkForNewVersion();
+        UpdateChecker.startupCheckForNewVersion();
 
         if (skipLauncherEnabled) {
             launchOpenAllExit();
