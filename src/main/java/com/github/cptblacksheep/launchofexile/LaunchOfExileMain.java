@@ -57,8 +57,10 @@ public class LaunchOfExileMain {
     private JPanel panelPoeVersion;
     private JPanel panelPoeExeLocation;
     private JPanel panelAhkExeLocation;
+    private JLabel lblLoEVersion;
 
     private LaunchOfExileMain() {
+        UpdateChecker.checkForNewVersion();
         addItemsToComboBoxVersion();
         tfPoeExeLocation.setText(settings.getPoeExeLocation());
         tfAhkExeLocation.setText(settings.getAhkExeLocation());
@@ -72,6 +74,8 @@ public class LaunchOfExileMain {
         checkBoxEnableDarkMode.setSelected(settings.isDarkModeEnabled());
 
         createJTablesAndModels();
+
+        lblLoEVersion.setText("v" + UpdateChecker.VERSION);
 
         btnAddTool.addActionListener(e -> showAddToolDialog());
 

@@ -440,13 +440,13 @@
               <visible value="true"/>
             </properties>
           </component>
-          <component id="b8c3b" class="javax.swing.JLabel">
+          <component id="b8c3b" class="javax.swing.JLabel" binding="lblLoEVersion">
             <constraints>
               <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <foreground color="-6579301"/>
-              <text value="v1.1.2"/>
+              <text value="v1.0.0"/>
             </properties>
           </component>
         </children>
