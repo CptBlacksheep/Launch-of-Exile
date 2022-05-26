@@ -1,5 +1,6 @@
 package com.github.cptblacksheep.launchofexile;
 
+import com.github.cptblacksheep.launchofexile.datamanagement.Settings;
 import com.github.cptblacksheep.launchofexile.datamanagement.WebsiteManager;
 
 import javax.swing.*;
@@ -19,6 +20,11 @@ public class UpdateChecker {
     }
 
     public static void checkForNewVersion() {
+        boolean updateNotificationsEnabled = Settings.getSettings().isUpdateNotificationsEnabled();
+
+        if (!updateNotificationsEnabled)
+            return;
+
         String latestVersionTag = latestVersionTag();
         boolean newVersionAvailable = newVersionAvailable(latestVersionTag);
 

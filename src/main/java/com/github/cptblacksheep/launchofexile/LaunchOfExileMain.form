@@ -228,7 +228,7 @@
           </grid>
         </children>
       </grid>
-      <grid id="7bd7c" binding="panelSettings" layout-manager="GridLayoutManager" row-count="8" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="7bd7c" binding="panelSettings" layout-manager="GridLayoutManager" row-count="9" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="10" left="5" bottom="5" right="5"/>
         <constraints>
           <tabbedpane title="Settings"/>
@@ -240,7 +240,7 @@
         <children>
           <vspacer id="18223">
             <constraints>
-              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
           </vspacer>
           <component id="e2104" class="javax.swing.JCheckBox" binding="checkBoxEnableDarkMode">
@@ -276,7 +276,7 @@
                   <model/>
                 </properties>
               </component>
-              <component id="64ef1" class="javax.swing.JLabel" binding="lblVersion">
+              <component id="64ef1" class="javax.swing.JLabel" binding="lblPoeVersion">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                     <minimum-size width="130" height="-1"/>
@@ -442,13 +442,30 @@
           </component>
           <component id="b8c3b" class="javax.swing.JLabel" binding="lblLoEVersion">
             <constraints>
-              <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <foreground color="-6579301"/>
               <text value="v1.0.0"/>
             </properties>
           </component>
+          <component id="8bcbf" class="javax.swing.JCheckBox" binding="checkBoxShowUpdateNotifications">
+            <constraints>
+              <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <actionCommand value="Show update notifications"/>
+              <focusable value="false"/>
+              <text value="Show update notifications"/>
+            </properties>
+          </component>
+          <vspacer id="2e655">
+            <constraints>
+              <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                <preferred-size width="-1" height="25"/>
+              </grid>
+            </constraints>
+          </vspacer>
         </children>
       </grid>
     </children>

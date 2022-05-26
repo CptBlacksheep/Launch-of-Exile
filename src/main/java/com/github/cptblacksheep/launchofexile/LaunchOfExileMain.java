@@ -34,7 +34,7 @@ public class LaunchOfExileMain {
     private JButton btnAddWebsite;
     private JButton btnRemoveWebsite;
     private JComboBox<PoeVersion> comboBoxVersion;
-    private JLabel lblVersion;
+    private JLabel lblPoeVersion;
     private JScrollPane scrollPaneTools;
     private JScrollPane scrollPaneWebsites;
     private JLabel lblPoeExeLocation;
@@ -58,9 +58,11 @@ public class LaunchOfExileMain {
     private JPanel panelPoeExeLocation;
     private JPanel panelAhkExeLocation;
     private JLabel lblLoEVersion;
+    private JCheckBox checkBoxShowUpdateNotifications;
 
     private LaunchOfExileMain() {
         UpdateChecker.checkForNewVersion();
+
         addItemsToComboBoxVersion();
         tfPoeExeLocation.setText(settings.getPoeExeLocation());
         tfAhkExeLocation.setText(settings.getAhkExeLocation());
@@ -72,6 +74,7 @@ public class LaunchOfExileMain {
         setAHKComponentVisibility(settings.isAhkSupportEnabled());
 
         checkBoxEnableDarkMode.setSelected(settings.isDarkModeEnabled());
+        checkBoxShowUpdateNotifications.setSelected(settings.isUpdateNotificationsEnabled());
 
         createJTablesAndModels();
 
@@ -254,6 +257,11 @@ public class LaunchOfExileMain {
         });
 
         btnSetAhkExeLocation.addActionListener(e -> showSetAhkExeLocationDialog());
+
+        checkBoxShowUpdateNotifications.addActionListener(e -> {
+            settings.setUpdateNotificationsEnabled(checkBoxShowUpdateNotifications.isSelected());
+            jsonSerializer.saveSettings();
+        });
     }
 
     public static void initialize() {

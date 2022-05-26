@@ -11,6 +11,7 @@ public class Settings {
     private boolean darkModeEnabled;
     private boolean ahkSupportEnabled;
     private String ahkExeLocation;
+    private boolean updateNotificationsEnabled;
 
     private Settings() {
         poeExeLocation = "";
@@ -18,6 +19,7 @@ public class Settings {
         selectedPoeVersion = PoeVersion.STEAM;
         darkModeEnabled = false;
         ahkSupportEnabled = false;
+        updateNotificationsEnabled = true;
     }
 
     @JsonCreator
@@ -66,5 +68,13 @@ public class Settings {
 
     public void setAhkSupportEnabled(boolean ahkSupportEnabled) {
         this.ahkSupportEnabled = ahkSupportEnabled;
+    }
+
+    public boolean isUpdateNotificationsEnabled() {
+        return updateNotificationsEnabled;
+    }
+
+    public void setUpdateNotificationsEnabled(boolean updateNotificationsEnabled) {
+        this.updateNotificationsEnabled = updateNotificationsEnabled;
     }
 }

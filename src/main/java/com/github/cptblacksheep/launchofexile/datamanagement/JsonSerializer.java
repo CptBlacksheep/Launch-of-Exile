@@ -144,6 +144,12 @@ public class JsonSerializer {
                 settings.setAhkExeLocation(ahkExeLocation);
             }
 
+            part = jsonNode.get("updateNotificationsEnabled");
+            if (part != null) {
+                boolean updateNotificationsEnabled = part.asBoolean(true);
+                settings.setUpdateNotificationsEnabled(updateNotificationsEnabled);
+            }
+
         } catch (IOException | RuntimeException ex) {
             JOptionPane.showMessageDialog(null, "Failed to load settings.",
                     "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
