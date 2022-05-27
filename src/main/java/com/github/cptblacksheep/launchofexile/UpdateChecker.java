@@ -52,7 +52,9 @@ public class UpdateChecker {
         try {
             WebsiteManager.openWebsite("https://github.com/CptBlacksheep/Launch-of-Exile/releases/latest");
         } catch (URISyntaxException | IOException e) {
-            //Ignore
+            JOptionPane.showMessageDialog(
+                    null, "Failed to open release page.",
+                    "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
         }
 
         if (exitAfterGoToReleasePage)
@@ -76,10 +78,6 @@ public class UpdateChecker {
     }
 
     private static boolean newVersionAvailable(String latestVersionTag) {
-
-        if (latestVersionTag == null || latestVersionTag.isBlank())
-            return false;
-
         return !latestVersionTag.equals("v" + VERSION);
     }
 }
