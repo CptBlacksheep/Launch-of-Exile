@@ -33,6 +33,10 @@ public class UpdateChecker {
 
     public static boolean checkForNewVersion() {
         String latestVersionTag = latestVersionTag();
+
+        if (latestVersionTag == null)
+            return false;
+
         return newVersionAvailable(latestVersionTag);
     }
 
@@ -73,7 +77,7 @@ public class UpdateChecker {
             String path = response.uri().getPath();
             return path.substring(path.lastIndexOf('/') + 1);
         } catch (IOException | InterruptedException e) {
-            return "";
+            return null;
         }
     }
 
