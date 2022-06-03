@@ -11,9 +11,10 @@ public class UriWrapperTableModel extends AbstractTableModel implements TableMod
     private final String[] columnNames;
     private final List<UriWrapper> uriWrappers;
 
-    public UriWrapperTableModel(List<UriWrapper> uriWrappers, String firstColumnName, String secondColumnName) {
+    public UriWrapperTableModel(List<UriWrapper> uriWrappers, String firstColumnName, String secondColumnName,
+                                String thirdColumnName) {
         this.uriWrappers = Objects.requireNonNull(uriWrappers);
-        columnNames = new String[]{firstColumnName, secondColumnName};
+        columnNames = new String[]{firstColumnName, secondColumnName, thirdColumnName};
     }
 
     @Override
@@ -36,8 +37,9 @@ public class UriWrapperTableModel extends AbstractTableModel implements TableMod
         UriWrapper uriWrapper = getUriWrapper(row);
 
         return switch (column) {
-            case 0 -> uriWrapper.getName();
-            case 1 -> uriWrapper.getUri();
+            case 0 -> uriWrapper.isEnabled();
+            case 1 -> uriWrapper.getName();
+            case 2 -> uriWrapper.getUri();
             default -> null;
         };
     }
@@ -47,11 +49,20 @@ public class UriWrapperTableModel extends AbstractTableModel implements TableMod
         UriWrapper uriWrapper = getUriWrapper(row);
 
         switch (column) {
-            case 0 -> uriWrapper.setName((String) value);
-            case 1 -> uriWrapper.setUri((String) value);
+            case 0 -> uriWrapper.setEnabled((boolean) value);
+            case 1 -> uriWrapper.setName((String) value);
+            case 2 -> uriWrapper.setUri((String) value);
         }
 
         fireTableCellUpdated(row, column);
+    }
+
+    public void setUriWrapperName(String name, int row) {
+        setValueAt(name, row, 1);
+    }
+
+    public void setUriWrapperUri(String uri, int row) {
+        setValueAt(uri, row, 2);
     }
 
     public UriWrapper getUriWrapper(int row) {
@@ -75,8 +86,14 @@ public class UriWrapperTableModel extends AbstractTableModel implements TableMod
     @Override
     public Class<?> getColumnClass(int column) {
         return switch (column) {
-            case 0, 1 -> String.class;
+            case 0 -> Boolean.class;
+            case 1, 2 -> String.class;
             default -> Object.class;
         };
+    }
+
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return column == 0;
     }
 }

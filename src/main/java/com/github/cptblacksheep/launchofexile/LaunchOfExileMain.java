@@ -2,6 +2,7 @@ package com.github.cptblacksheep.launchofexile;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.github.cptblacksheep.launchofexile.components.BooleanUriWrapperTableCellRenderer;
 import com.github.cptblacksheep.launchofexile.components.UriWrapperTableCellRenderer;
 import com.github.cptblacksheep.launchofexile.components.UriWrapperTableModel;
 import com.github.cptblacksheep.launchofexile.datamanagement.*;
@@ -10,7 +11,9 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
 import java.util.Objects;
 
 public class LaunchOfExileMain {
@@ -40,8 +43,6 @@ public class LaunchOfExileMain {
     private JButton btnSetPoeExeLocation;
     private JSeparator separatorLaunch;
     private JButton btnLaunchPoeOnly;
-    private JButton btnEnableDisableTool;
-    private JButton btnEnableDisableWebsite;
     private JButton btnRenameTool;
     private JButton btnRenameWebsite;
     private JCheckBox checkBoxEnableDarkMode;
@@ -58,6 +59,8 @@ public class LaunchOfExileMain {
     private JLabel lblLoEVersion;
     private JCheckBox checkBoxShowUpdateNotifications;
     private JButton btnCheckForUpdates;
+    private JPanel panelToolButtons;
+    private JPanel panelWebsiteButtons;
 
     private LaunchOfExileMain() {
         addItemsToComboBoxVersion();
@@ -85,47 +88,10 @@ public class LaunchOfExileMain {
             if (selectedRow < 0)
                 return;
 
-            UriWrapper tool = modelTools.getUriWrapper(selectedRow);
-
-            if (tool == null)
-                return;
-
             modelTools.removeUriWrapper(selectedRow);
-            jsonSerializer.saveData();
 
             if (selectedRow > 0)
                 tableTools.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
-        });
-
-        btnEnableDisableTool.addActionListener(e -> {
-            int selectedRow = tableTools.getSelectedRow();
-
-            if (selectedRow < 0)
-                return;
-
-            UriWrapper tool = modelTools.getUriWrapper(selectedRow);
-
-            if (tool == null)
-                return;
-
-            boolean isAhkFile = tool.getUri().toLowerCase().endsWith(".ahk");
-
-            if (isAhkFile && !checkBoxEnableAhkSupport.isSelected()) {
-                JOptionPane.showMessageDialog(
-                        null, """
-                                Failed to enable .ahk tool.
-
-                                Set "Enable .ahk support" checkbox to resolve.""",
-                        "Launch of Exile - Error", JOptionPane.WARNING_MESSAGE);
-                tableTools.repaint();
-                tableTools.setRowSelectionInterval(selectedRow, selectedRow);
-                return;
-            }
-
-            tool.setEnabled(!tool.isEnabled());
-            tableTools.repaint();
-            jsonSerializer.saveData();
-            tableTools.setRowSelectionInterval(selectedRow, selectedRow);
         });
 
         btnRenameTool.addActionListener(e -> {
@@ -134,13 +100,7 @@ public class LaunchOfExileMain {
             if (selectedRow < 0)
                 return;
 
-            UriWrapper tool = modelTools.getUriWrapper(selectedRow);
-
-            if (tool == null)
-                return;
-
-            rename(tool);
-            tableTools.repaint();
+            renameUriWrapper(modelTools, selectedRow);
             tableTools.setRowSelectionInterval(selectedRow, selectedRow);
         });
 
@@ -152,33 +112,10 @@ public class LaunchOfExileMain {
             if (selectedRow < 0)
                 return;
 
-            UriWrapper website = modelWebsites.getUriWrapper(selectedRow);
-
-            if (website == null)
-                return;
-
             modelWebsites.removeUriWrapper(selectedRow);
-            jsonSerializer.saveData();
 
             if (selectedRow > 0)
                 tableWebsites.setRowSelectionInterval(selectedRow - 1, selectedRow - 1);
-        });
-
-        btnEnableDisableWebsite.addActionListener(e -> {
-            int selectedRow = tableWebsites.getSelectedRow();
-
-            if (selectedRow < 0)
-                return;
-
-            UriWrapper website = modelWebsites.getUriWrapper(selectedRow);
-
-            if (website == null)
-                return;
-
-            website.setEnabled(!website.isEnabled());
-            tableWebsites.repaint();
-            jsonSerializer.saveData();
-            tableWebsites.setRowSelectionInterval(selectedRow, selectedRow);
         });
 
         btnRenameWebsite.addActionListener(e -> {
@@ -187,14 +124,7 @@ public class LaunchOfExileMain {
             if (selectedRow < 0)
                 return;
 
-            UriWrapper website = modelWebsites.getUriWrapper(selectedRow);
-
-            if (website == null)
-                return;
-
-            rename(website);
-            tableWebsites.repaint();
-
+            renameUriWrapper(modelWebsites, selectedRow);
             tableWebsites.setRowSelectionInterval(selectedRow, selectedRow);
         });
 
@@ -269,6 +199,38 @@ public class LaunchOfExileMain {
                 JOptionPane.showMessageDialog(null, "LoE is up to date.",
                         "Launch of Exile - Update", JOptionPane.INFORMATION_MESSAGE);
         });
+
+        tableTools.getModel().addTableModelListener(e -> {
+            int row = e.getFirstRow();
+            int column = e.getColumn();
+
+            if (column == 0) {
+                UriWrapper tool = modelTools.getUriWrapper(row);
+                boolean isAhkFile = tool.getUri().toLowerCase().endsWith(".ahk");
+
+                if (isAhkFile && !checkBoxEnableAhkSupport.isSelected() && tool.isEnabled()) {
+                    tool.setEnabled(false);
+                    JOptionPane.showMessageDialog(
+                            null, """
+                                    Failed to enable .ahk tool.
+
+                                    Set "Enable .ahk support" checkbox to resolve.""",
+                            "Launch of Exile - Error", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+
+            tableTools.repaint();
+            jsonSerializer.saveData();
+        });
+
+        tableWebsites.getModel().addTableModelListener(e -> {
+            int row = e.getFirstRow();
+            int column = e.getColumn();
+
+            tableWebsites.repaint();
+            jsonSerializer.saveData();
+        });
     }
 
     public static void initialize() {
@@ -328,24 +290,28 @@ public class LaunchOfExileMain {
     }
 
     private void createJTablesAndModels() {
+        UriWrapperTableCellRenderer renderer = new UriWrapperTableCellRenderer();
+        BooleanUriWrapperTableCellRenderer booleanRenderer = new BooleanUriWrapperTableCellRenderer();
+
         modelTools = new UriWrapperTableModel(applicationManager.getApplications(),
-                "Name", "Path");
+                "Launch", "Name", "Path");
 
         tableTools.setModel(modelTools);
         tableTools.getTableHeader().setReorderingAllowed(false);
         tableTools.getTableHeader().setResizingAllowed(false);
         tableTools.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        UriWrapperTableCellRenderer renderer = new UriWrapperTableCellRenderer();
         tableTools.setDefaultRenderer(String.class, renderer);
 
-        TableColumn toolsNameColumn = tableTools.getColumnModel().getColumn(0);
-        TableColumn pathNameColumn = tableTools.getColumnModel().getColumn(1);
+        TableColumn toolsEnabledColumn = tableTools.getColumnModel().getColumn(0);
+        toolsEnabledColumn.setCellRenderer(booleanRenderer);
+        TableColumn toolsNameColumn = tableTools.getColumnModel().getColumn(1);
+        TableColumn toolsPathColumn = tableTools.getColumnModel().getColumn(2);
+        toolsEnabledColumn.setMaxWidth(50);
         toolsNameColumn.setMinWidth(150);
-        pathNameColumn.setMinWidth(300);
+        toolsPathColumn.setMinWidth(300);
 
         modelWebsites = new UriWrapperTableModel(websiteManager.getWebsites(),
-                "Name", "URL");
+                "Launch", "Name", "URL");
 
         tableWebsites.setModel(modelWebsites);
         tableWebsites.getTableHeader().setReorderingAllowed(false);
@@ -353,22 +319,24 @@ public class LaunchOfExileMain {
         tableWebsites.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tableWebsites.setDefaultRenderer(String.class, renderer);
 
-        TableColumn websiteNameColumn = tableWebsites.getColumnModel().getColumn(0);
-        TableColumn websiteUrlColumn = tableWebsites.getColumnModel().getColumn(1);
-        websiteNameColumn.setMinWidth(150);
-        websiteUrlColumn.setMinWidth(300);
+        TableColumn websitesEnabledColumn = tableWebsites.getColumnModel().getColumn(0);
+        websitesEnabledColumn.setCellRenderer(booleanRenderer);
+        TableColumn websitesNameColumn = tableWebsites.getColumnModel().getColumn(1);
+        TableColumn websitesUrlColumn = tableWebsites.getColumnModel().getColumn(2);
+        websitesEnabledColumn.setMaxWidth(50);
+        websitesNameColumn.setMinWidth(150);
+        websitesUrlColumn.setMinWidth(300);
 
     }
 
-    private void rename(UriWrapper uriWrapper) {
+    private void renameUriWrapper(UriWrapperTableModel model, int row) {
         String newName = JOptionPane.showInputDialog(null, "Enter new name:",
                 "Launch of Exile - Rename", JOptionPane.QUESTION_MESSAGE);
 
         if (newName == null)
             return;
 
-        uriWrapper.setName(newName);
-        jsonSerializer.saveData();
+        model.setUriWrapperName(newName, row);
     }
 
     private void showSetPoeExeLocationDialog() {
@@ -417,19 +385,18 @@ public class LaunchOfExileMain {
 
         String url = tfUrl.getText();
 
-        if (url == null || url.isBlank())
+        if (url.isBlank())
             return;
 
         String name = tfName.getText();
 
         UriWrapper website;
-        if (name == null || name.isBlank())
+        if (name.isBlank())
             website = new UriWrapper(url);
         else
             website = new UriWrapper(url, name);
 
         modelWebsites.addUriWrapper(website);
-        jsonSerializer.saveData();
         tableWebsites.setRowSelectionInterval(modelWebsites.getRowCount() - 1, modelWebsites.getRowCount() - 1);
     }
 
@@ -445,22 +412,22 @@ public class LaunchOfExileMain {
 
         int returnValue = fc.showDialog(null, "Add to tools");
 
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            String name = JOptionPane.showInputDialog(null, "Set name (optional):",
-                    "Launch of Exile - Add tool", JOptionPane.QUESTION_MESSAGE);
+        if (returnValue != JFileChooser.APPROVE_OPTION)
+            return;
 
-            String toolPath = fc.getSelectedFile().getAbsolutePath();
+        String name = JOptionPane.showInputDialog(null, "Set name (optional):",
+                "Launch of Exile - Add tool", JOptionPane.QUESTION_MESSAGE);
 
-            UriWrapper tool;
-            if (name == null || name.isBlank())
-                tool = new UriWrapper(toolPath);
-            else
-                tool = new UriWrapper(toolPath, name);
+        String toolPath = fc.getSelectedFile().getAbsolutePath();
 
-            modelTools.addUriWrapper(tool);
-            jsonSerializer.saveData();
-            tableTools.setRowSelectionInterval(modelTools.getRowCount() - 1, modelTools.getRowCount() - 1);
-        }
+        UriWrapper tool;
+        if (name.isBlank())
+            tool = new UriWrapper(toolPath);
+        else
+            tool = new UriWrapper(toolPath, name);
+
+        modelTools.addUriWrapper(tool);
+        tableTools.setRowSelectionInterval(modelTools.getRowCount() - 1, modelTools.getRowCount() - 1);
     }
 
     private void addItemsToComboBoxVersion() {

@@ -1,5 +1,7 @@
 package com.github.cptblacksheep.launchofexile.datamanagement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
 
 public class UriWrapper {
@@ -42,6 +44,11 @@ public class UriWrapper {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    @JsonIgnore
+    public boolean isDisabled() {
+        return !isEnabled();
     }
 
 }
