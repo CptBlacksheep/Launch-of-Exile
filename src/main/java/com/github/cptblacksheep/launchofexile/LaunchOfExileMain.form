@@ -142,7 +142,8 @@
                 </constraints>
                 <properties>
                   <focusable value="false"/>
-                  <text value="Launch Poe only"/>
+                  <label value="Launch PoE only"/>
+                  <text value="Launch PoE only"/>
                 </properties>
               </component>
             </children>
@@ -279,7 +280,7 @@
                 </constraints>
                 <properties>
                   <focusable value="false"/>
-                  <text value="Poe version:"/>
+                  <text value="PoE version:"/>
                 </properties>
               </component>
             </children>

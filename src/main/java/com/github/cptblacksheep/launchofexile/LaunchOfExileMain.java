@@ -215,7 +215,7 @@ public class LaunchOfExileMain {
                                     Failed to enable .ahk tool.
 
                                     Set "Enable .ahk support" checkbox to resolve.""",
-                            "Launch of Exile - Error", JOptionPane.WARNING_MESSAGE);
+                            "Launch of Exile - Warning", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
             }
