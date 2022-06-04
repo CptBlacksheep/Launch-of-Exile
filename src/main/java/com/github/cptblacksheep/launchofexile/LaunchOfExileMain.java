@@ -8,6 +8,8 @@ import com.github.cptblacksheep.launchofexile.components.UriWrapperTableModel;
 import com.github.cptblacksheep.launchofexile.datamanagement.*;
 
 import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 import java.awt.*;
@@ -403,6 +405,23 @@ public class LaunchOfExileMain {
     private void showAddWebsiteDialog() {
         JTextField tfUrl = new JTextField();
         JTextField tfName = new JTextField();
+
+        tfUrl.addAncestorListener(new AncestorListener() {
+            @Override
+            public void ancestorAdded(AncestorEvent e) {
+                JComponent component = e.getComponent();
+                component.requestFocusInWindow();
+                component.removeAncestorListener(this);
+            }
+
+            @Override
+            public void ancestorRemoved(AncestorEvent e) {
+            }
+
+            @Override
+            public void ancestorMoved(AncestorEvent e) {
+            }
+        });
 
         Object[] inputFields = {"URL:", tfUrl, "Name (optional):", tfName};
 
