@@ -357,7 +357,7 @@ public class LaunchOfExileMain {
         String newName;
         if (!uriWrapper.getName().isBlank() && uriWrapper.getName().length() <= 40)
             newName = JOptionPane.showInputDialog(null,
-                    "Enter new name for " + uriWrapper.getName() + ":",
+                    "Enter new name for \"" + uriWrapper.getName() + "\":",
                     "Launch of Exile - Rename", JOptionPane.QUESTION_MESSAGE);
         else
             newName = JOptionPane.showInputDialog(null, "Enter new name:",
@@ -467,7 +467,7 @@ public class LaunchOfExileMain {
 
         JFileChooser fc;
         if (!tool.getName().isBlank() && tool.getName().length() <= 40)
-            fc = createToolFileChooser("Launch of Exile - Change path of " + tool.getName());
+            fc = createToolFileChooser("Launch of Exile - Change path of \"" + tool.getName() + "\"");
         else
             fc = createToolFileChooser("Launch of Exile - Change tool path");
 
@@ -533,7 +533,7 @@ public class LaunchOfExileMain {
         String newUrl;
         if (!website.getName().isBlank() && website.getName().length() <= 40)
             newUrl = JOptionPane.showInputDialog(null,
-                    "Enter new URL for " + website.getName() + ":",
+                    "Enter new URL for \"" + website.getName() + "\":",
                     "Launch of Exile - Change website URL", JOptionPane.QUESTION_MESSAGE);
         else
             newUrl = JOptionPane.showInputDialog(null, "Enter new URL:",
