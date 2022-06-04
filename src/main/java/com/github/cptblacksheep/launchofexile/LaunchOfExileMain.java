@@ -63,6 +63,8 @@ public class LaunchOfExileMain {
     private JButton btnCheckForUpdates;
     private JPanel panelToolButtons;
     private JPanel panelWebsiteButtons;
+    private JButton btnChangeToolPath;
+    private JButton btnChangeWebsiteUrl;
 
     private LaunchOfExileMain() {
         addItemsToComboBoxVersion();
