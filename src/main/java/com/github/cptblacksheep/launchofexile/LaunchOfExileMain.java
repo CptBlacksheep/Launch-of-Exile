@@ -422,6 +422,29 @@ public class LaunchOfExileMain {
         tableTools.setRowSelectionInterval(modelTools.getRowCount() - 1, modelTools.getRowCount() - 1);
     }
 
+    private void showChangeToolPathDialog(int modelRow) {
+        UriWrapper tool = modelTools.getUriWrapper(modelRow);
+
+        JFileChooser fc;
+        if (!tool.getName().isBlank())
+            fc = createToolFileChooser("Launch of Exile - Change path of " + tool.getName());
+        else
+            fc = createToolFileChooser("Launch of Exile - Change tool path");
+
+        int returnValue = fc.showDialog(null, "Change tool path");
+
+        if (returnValue != JFileChooser.APPROVE_OPTION)
+            return;
+
+        String pathname = fc.getSelectedFile().getAbsolutePath();
+
+        if (!toolExistsAndHasValidExtension(pathname))
+            return;
+
+        modelTools.setUriWrapperUri(pathname, modelRow);
+        tableTools.setRowSelectionInterval(modelRow, modelRow);
+    }
+
     private JFileChooser createToolFileChooser(String dialogTitle) {
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle(dialogTitle);
