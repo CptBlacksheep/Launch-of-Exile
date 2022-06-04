@@ -334,8 +334,16 @@ public class LaunchOfExileMain {
     }
 
     private void renameUriWrapper(UriWrapperTableModel model, int row) {
-        String newName = JOptionPane.showInputDialog(null, "Enter new name:",
-                "Launch of Exile - Rename", JOptionPane.QUESTION_MESSAGE);
+        UriWrapper uriWrapper = model.getUriWrapper(row);
+
+        String newName;
+        if (!uriWrapper.getName().isBlank() && uriWrapper.getName().length() <= 40)
+            newName = JOptionPane.showInputDialog(null,
+                    "Enter new name for " + uriWrapper.getName() + ":",
+                    "Launch of Exile - Rename", JOptionPane.QUESTION_MESSAGE);
+        else
+            newName = JOptionPane.showInputDialog(null, "Enter new name:",
+                    "Launch of Exile - Rename", JOptionPane.QUESTION_MESSAGE);
 
         if (newName == null)
             return;
@@ -428,7 +436,7 @@ public class LaunchOfExileMain {
         UriWrapper tool = modelTools.getUriWrapper(modelRow);
 
         JFileChooser fc;
-        if (!tool.getName().isBlank())
+        if (!tool.getName().isBlank() && tool.getName().length() <= 40)
             fc = createToolFileChooser("Launch of Exile - Change path of " + tool.getName());
         else
             fc = createToolFileChooser("Launch of Exile - Change tool path");
