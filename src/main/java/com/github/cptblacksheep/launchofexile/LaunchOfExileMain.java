@@ -418,13 +418,7 @@ public class LaunchOfExileMain {
             return;
 
         String name = tfName.getText();
-
-        UriWrapper website;
-        if (name.isBlank())
-            website = new UriWrapper(url);
-        else
-            website = new UriWrapper(url, name);
-
+        UriWrapper website = name.isBlank() ? new UriWrapper(url) : new UriWrapper(url, name);
         modelWebsites.addUriWrapper(website);
         tableWebsites.setRowSelectionInterval(modelWebsites.getRowCount() - 1, modelWebsites.getRowCount() - 1);
     }
