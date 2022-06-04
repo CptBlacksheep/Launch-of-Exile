@@ -53,6 +53,16 @@ public class ApplicationManager {
         }
     }
 
+    public static boolean extensionIsValid(String pathname, String[] fileExtensions) {
+        String lowerCasePathname = pathname.toLowerCase();
+
+        for (String extension : fileExtensions)
+            if (lowerCasePathname.endsWith(extension))
+                return true;
+
+        return false;
+    }
+
     public void startAllEnabledApplications() {
         applications.stream().filter(UriWrapper::isEnabled).forEach(application -> {
             try {
@@ -65,19 +75,19 @@ public class ApplicationManager {
             } catch (ExeNotFoundException ex) {
                 JOptionPane.showMessageDialog(
                         null, String.format("Failed to launch application: %s%n%n"
-                                + "AHK .exe not found.", application.getUri()),
+                                            + "AHK .exe not found.", application.getUri()),
                         "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             } catch (FileNotFoundException ex) {
                 JOptionPane.showMessageDialog(
                         null, String.format("Failed to launch application: %s%n%n"
-                                + "Application not found.", application.getUri()),
+                                            + "Application not found.", application.getUri()),
                         "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(
                         null, String.format("Failed to launch application: %s%n%n"
-                                + "It's possible that the application needs admin rights (set the launcher to start "
-                                + "in admin mode, visit the FAQ at https://github.com/CptBlacksheep/Launch-of-Exile "
-                                + "for more information).", application.getUri()),
+                                            + "It's possible that the application needs admin rights (set the launcher to start "
+                                            + "in admin mode, visit the FAQ at https://github.com/CptBlacksheep/Launch-of-Exile "
+                                            + "for more information).", application.getUri()),
                         "Launch of Exile - Error", JOptionPane.ERROR_MESSAGE);
             }
         });

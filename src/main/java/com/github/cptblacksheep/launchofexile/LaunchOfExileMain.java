@@ -14,6 +14,8 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.util.Objects;
 
 public class LaunchOfExileMain {
@@ -401,8 +403,28 @@ public class LaunchOfExileMain {
     }
 
     private void showAddToolDialog() {
+        JFileChooser fc = createToolFileChooser("Launch of Exile - Add tool");
+        int returnValue = fc.showDialog(null, "Add to tools");
+
+        if (returnValue != JFileChooser.APPROVE_OPTION)
+            return;
+
+        String pathname = fc.getSelectedFile().getAbsolutePath();
+
+        if (!toolExistsAndHasValidExtension(pathname))
+            return;
+
+        String name = JOptionPane.showInputDialog(null, "Set name (optional):",
+                "Launch of Exile - Add tool", JOptionPane.QUESTION_MESSAGE);
+
+        UriWrapper tool = name.isBlank() ? new UriWrapper(pathname) : new UriWrapper(pathname, name);
+        modelTools.addUriWrapper(tool);
+        tableTools.setRowSelectionInterval(modelTools.getRowCount() - 1, modelTools.getRowCount() - 1);
+    }
+
+    private JFileChooser createToolFileChooser(String dialogTitle) {
         JFileChooser fc = new JFileChooser();
-        fc.setDialogTitle("Launch of Exile - Add tool");
+        fc.setDialogTitle(dialogTitle);
         fc.setAcceptAllFileFilterUsed(false);
 
         if (settings.isAhkSupportEnabled())
@@ -410,24 +432,36 @@ public class LaunchOfExileMain {
         else
             fc.setFileFilter(new FileNameExtensionFilter(".exe, .jar", "exe", "jar"));
 
-        int returnValue = fc.showDialog(null, "Add to tools");
+        return fc;
+    }
 
-        if (returnValue != JFileChooser.APPROVE_OPTION)
-            return;
+    private boolean toolExistsAndHasValidExtension(String pathname) {
+        Path path;
 
-        String name = JOptionPane.showInputDialog(null, "Set name (optional):",
-                "Launch of Exile - Add tool", JOptionPane.QUESTION_MESSAGE);
+        try {
+            path = Path.of(pathname);
+        } catch (InvalidPathException e) {
+            JOptionPane.showMessageDialog(null, "Invalid path.",
+                    "Launch of Exile - Warning", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
 
-        String toolPath = fc.getSelectedFile().getAbsolutePath();
+        if (!path.toFile().exists()) {
+            JOptionPane.showMessageDialog(null, "File doesn't exist.",
+                    "Launch of Exile - Warning", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
 
-        UriWrapper tool;
-        if (name.isBlank())
-            tool = new UriWrapper(toolPath);
-        else
-            tool = new UriWrapper(toolPath, name);
+        String[] validExtensions = {".exe", ".jar", ".ahk"};
+        boolean extensionIsValid = ApplicationManager.extensionIsValid(pathname, validExtensions);
 
-        modelTools.addUriWrapper(tool);
-        tableTools.setRowSelectionInterval(modelTools.getRowCount() - 1, modelTools.getRowCount() - 1);
+        if (!extensionIsValid) {
+            JOptionPane.showMessageDialog(null, "File extension isn't valid.",
+                    "Launch of Exile - Warning", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
     }
 
     private void addItemsToComboBoxVersion() {
