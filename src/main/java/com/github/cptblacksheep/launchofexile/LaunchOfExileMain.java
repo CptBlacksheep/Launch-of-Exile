@@ -104,8 +104,16 @@ public class LaunchOfExileMain {
             if (selectedRow < 0)
                 return;
 
-            renameUriWrapper(modelTools, selectedRow);
-            tableTools.setRowSelectionInterval(selectedRow, selectedRow);
+            renameUriWrapper(modelTools, selectedRow, tableTools);
+        });
+
+        btnChangeToolPath.addActionListener(e -> {
+            int selectedRow = tableTools.getSelectedRow();
+
+            if (selectedRow < 0)
+                return;
+
+            showChangeToolPathDialog(selectedRow);
         });
 
         btnAddWebsite.addActionListener(e -> showAddWebsiteDialog());
@@ -128,8 +136,16 @@ public class LaunchOfExileMain {
             if (selectedRow < 0)
                 return;
 
-            renameUriWrapper(modelWebsites, selectedRow);
-            tableWebsites.setRowSelectionInterval(selectedRow, selectedRow);
+            renameUriWrapper(modelWebsites, selectedRow, tableWebsites);
+        });
+
+        btnChangeWebsiteUrl.addActionListener(e -> {
+            int selectedRow = tableWebsites.getSelectedRow();
+
+            if (selectedRow < 0)
+                return;
+
+            showChangeWebsiteUrlDialog(selectedRow);
         });
 
         btnSetPoeExeLocation.addActionListener(e -> showSetPoeExeLocationDialog());
@@ -333,8 +349,8 @@ public class LaunchOfExileMain {
 
     }
 
-    private void renameUriWrapper(UriWrapperTableModel model, int row) {
-        UriWrapper uriWrapper = model.getUriWrapper(row);
+    private void renameUriWrapper(UriWrapperTableModel model, int modelRow, JTable table) {
+        UriWrapper uriWrapper = model.getUriWrapper(modelRow);
 
         String newName;
         if (!uriWrapper.getName().isBlank() && uriWrapper.getName().length() <= 40)
@@ -348,7 +364,8 @@ public class LaunchOfExileMain {
         if (newName == null)
             return;
 
-        model.setUriWrapperName(newName, row);
+        model.setUriWrapperName(newName, modelRow);
+        table.setRowSelectionInterval(modelRow, modelRow);
     }
 
     private void showSetPoeExeLocationDialog() {
@@ -495,6 +512,25 @@ public class LaunchOfExileMain {
         }
 
         return true;
+    }
+
+    private void showChangeWebsiteUrlDialog(int modelRow) {
+        UriWrapper website = modelWebsites.getUriWrapper(modelRow);
+
+        String newUrl;
+        if (!website.getName().isBlank() && website.getName().length() <= 40)
+            newUrl = JOptionPane.showInputDialog(null,
+                    "Enter new URL for " + website.getName() + ":",
+                    "Launch of Exile - Change website URL", JOptionPane.QUESTION_MESSAGE);
+        else
+            newUrl = JOptionPane.showInputDialog(null, "Enter new URL:",
+                    "Launch of Exile - Change website URL", JOptionPane.QUESTION_MESSAGE);
+
+        if (newUrl == null || newUrl.isBlank())
+            return;
+
+        modelWebsites.setUriWrapperUri(newUrl, modelRow);
+        tableWebsites.setRowSelectionInterval(modelRow, modelRow);
     }
 
     private void addItemsToComboBoxVersion() {
