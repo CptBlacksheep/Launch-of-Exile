@@ -41,5 +41,9 @@ It's pretty self Explanatory.
 - The File extension of my tool is not supported.
 
   Please tell me about it, I will try to find a solution.
+
+- I found a bug.
+
+  Please report it, I will try to fix it.
 ---
 This product isn't affiliated with or endorsed by Grinding Gear Games in any way.
