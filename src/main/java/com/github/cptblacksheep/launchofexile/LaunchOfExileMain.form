@@ -15,7 +15,7 @@
           <tabbedpane title="Launcher"/>
         </constraints>
         <properties>
-          <focusable value="false"/>
+          <focusable value="true"/>
         </properties>
         <border type="none"/>
         <children>

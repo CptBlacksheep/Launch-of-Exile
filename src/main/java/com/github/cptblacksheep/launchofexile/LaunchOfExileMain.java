@@ -85,6 +85,7 @@ public class LaunchOfExileMain {
         createJTablesAndModels();
 
         lblLoEVersion.setText("v" + UpdateChecker.VERSION);
+        panelMain.requestFocusInWindow();
 
         btnAddTool.addActionListener(e -> showAddToolDialog());
 
