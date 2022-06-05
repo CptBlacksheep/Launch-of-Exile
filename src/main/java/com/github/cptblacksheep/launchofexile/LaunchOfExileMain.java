@@ -334,7 +334,7 @@ public class LaunchOfExileMain {
         toolsPathColumn.setMinWidth(300);
 
         modelWebsites = new UriWrapperTableModel(websiteManager.getWebsites(),
-                "Launch", "Name", "URL");
+                "Open", "Name", "URL");
 
         tableWebsites.setModel(modelWebsites);
         tableWebsites.getTableHeader().setReorderingAllowed(false);
