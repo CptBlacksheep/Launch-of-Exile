@@ -23,7 +23,10 @@ public class ApplicationManager {
             throw new FileNotFoundException("Application not found");
 
         File workingDir = new File(applicationUri).getParentFile();
-        new ProcessBuilder(applicationUri).directory(workingDir).start();
+        new ProcessBuilder(applicationUri)
+                .directory(workingDir)
+                .inheritIO()
+                .start();
     }
 
     public static void startApplication(UriWrapper application) throws IOException {
@@ -42,7 +45,10 @@ public class ApplicationManager {
             throw new FileNotFoundException("Application not found");
 
         File workingDir = new File(applicationUri).getParentFile();
-        new ProcessBuilder(ahkExeLocation, applicationUri).directory(workingDir).start();
+        new ProcessBuilder(ahkExeLocation, applicationUri)
+                .directory(workingDir)
+                .inheritIO()
+                .start();
     }
 
     public static void startSteamGameById(String id) throws IOException {
